@@ -36,6 +36,9 @@ public class UserController {
     @Autowired
     UserRepository users;
     
+    @Autowired
+    UserRepository userService;
+    
     @GetMapping("/home")
     public String testHome(HttpSession session) {
         if (session != null && session.getAttribute("user") != null) {
@@ -148,24 +151,35 @@ public class UserController {
 
             
     @DeleteMapping("/nflpickem/users/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable("username") String username){
-        
-        if (users.existsById(username)){
-            //delete it!
-            this.deleteUser(username);
-            //return result
-            return new ResponseEntity(username, HttpStatus.OK);
-        } else {
-            //not there
-            return new ResponseEntity(username, HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> deleteUser(@PathVariable("username") String username, HttpSession session){
+                 
+        //get the logged in user (maybe null if not logged in
+        User loggedInUser = (User) session.getAttribute("user");
+        //get user admin status
+        boolean admin = session.getAttribute("admin") != null;
+        //check for good return
+        if (loggedInUser != null) {
+            //does it exist?
+            if (userService.existsById(username)) {
+                userService.deleteById(username);
+                 //already there
+                    return new ResponseEntity(username, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+                }
+                
+            } else {
+                //add it
+                return new ResponseEntity(username, HttpStatus.NOT_FOUND);
+            }
+       
         }
-}
-        
+      
       
     @GetMapping("/nflpickem/user/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "OK";
     }
-    
 }
+
