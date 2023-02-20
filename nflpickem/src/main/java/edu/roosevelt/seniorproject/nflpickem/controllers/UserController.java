@@ -8,12 +8,14 @@ import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,7 +91,18 @@ public class UserController {
         } 
         return new ResponseEntity(user, HttpStatus.UNAUTHORIZED);
     }
-    
+    //add user
+  @PostMapping(value = "/nflpickem/user/insertuser", consumes = MediaType.APPLICATION_JSON_VALUE)  
+  public ResponseEntity<User> insertUser (@RequestBody final User u, HttpSession session) {
+      if (users.existsById(u.getUsername())) {
+          //If user exists
+          return new ResponseEntity(u,HttpStatus.FOUND);
+      }else{
+          //add to your db
+          return new ResponseEntity(u,HttpStatus.OK);
+      }
+  }  
+     
     @GetMapping("/nflpickem/user/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username, HttpSession session) {
         
