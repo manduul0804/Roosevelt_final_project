@@ -12,5 +12,9 @@ import org.springframework.data.repository.CrudRepository;
  * @author mruth
  */
 public interface PickemGroupRepository extends CrudRepository<PickemGroup, String>{
+
+    boolean contains(PickemGroup name);
+
+    Object existsByID(String name);
     
 }
