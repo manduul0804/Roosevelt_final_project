@@ -7,10 +7,14 @@ package edu.roosevelt.seniorproject.nflpickem.pickemgroupuser;
 
 import org.springframework.data.repository.CrudRepository;
 
+import edu.roosevelt.seniorproject.nflpickem.user.User;
+
 /**
  *
  * @author mruth
  */
 public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUser, Integer>{
+
+    PickemGroupUser findByUserAndGroup(User user, Object findByName);
     
 }
