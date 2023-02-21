@@ -96,99 +96,13 @@ public class PickemGroupController {
       return false;
   }
     
-    //checking if user is in group
-    private boolean isInGroup(HttpSession session, String groupname) {
-      if (session.getAttribute("user") != null) {
-        User user = users.findByUsername((String)session.getAttribute("user"));
-        PickemGroupUser groupuser = groupusers.findByUserAndGroup(user, groups.findByName(groupname));
-        if (groupuser != null) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
     
-    //checking if user is group admin
-    private boolean isGroupAdmin(HttpSession session, String groupname) {
-      if (session.getAttribute("user") != null) {
-        User user = users.findByUsername((String)session.getAttribute("user"));
-        PickemGroupUser groupuser = groupusers.findByUserAndGroup(user, groups.findByName(groupname));
-        if (groupuser != null && groupuser.getIsAdmin()) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
     
-    //checking if user is group owner
-    private boolean isGroupOwner(HttpSession session, String groupname) {
-      if (session.getAttribute("user") != null) {
-        User user = users.findByUsername((String)session.getAttribute("user"));
-        PickemGroupUser groupuser = groupusers.findByUserAndGroup(user, groups.findByName(groupname));
-        if (groupuser != null && groupuser.getIsLeader()) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
     
-    //checking if user is group member
-    private boolean isGroupMember(HttpSession session, String groupname) {
-      if (session.getAttribute("user") != null) {
-        User user = users.findByUsername((String)session.getAttribute("user"));
-        PickemGroupUser groupuser = groupusers.findByUserAndGroup(user, groups.findByName(groupname));
-        if (groupuser != null && groupuser.getIsMember()) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-      }
+    
+   
 
-      //if user accepts invite, we need to set status to accepted
-      final boolean acceptInvite(HttpSession session, String groupname) {
-        if (isLoggedIn(session)) {
-          User user = users.findByUsername((String)session.getAttribute("user"));
-          PickemGroupUser groupuser = groupusers.findByUserAndGroup(user, groups.findByName(groupname));
-          if (groupuser != null) {
-            groupuser.setIsMember(true);
-            groupusers.save(groupuser);
-            return ResponseEntity.ok().build() != null;
-          } else {
-            return ResponseEntity.badRequest().build() != null;
-          }
-        } else {
-          return ResponseEntity.badRequest().build() != null;
-        }
-      }
 
-      //if user declines invite, we need to set status to declined
-      final boolean declineInvite(HttpSession session, String groupname) {
-        if (isLoggedIn(session)) {
-          User user = users.findByUsername((String)session.getAttribute("user"));
-          PickemGroupUser groupuser = groupusers.findByUserAndGroup(user, groups.findByName(groupname));
-          if (groupuser != null) {
-            groupuser.setIsMember(false);
-            groupusers.save(groupuser);
-            return ResponseEntity.ok().build() != null;
-          } else {
-            return ResponseEntity.badRequest().build() != null;
-          }
-        } else {
-          return ResponseEntity.badRequest().build() != null;
-        }
-    }   
   }
     //base url for all requests should be:
     // -> /nflpickem/groups 

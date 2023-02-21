@@ -5,9 +5,8 @@
 package edu.roosevelt.seniorproject.nflpickem.pickemgroupuser;
 
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
-
-import edu.roosevelt.seniorproject.nflpickem.user.User;
 
 /**
  *
@@ -15,6 +14,9 @@ import edu.roosevelt.seniorproject.nflpickem.user.User;
  */
 public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUser, Integer>{
 
-    PickemGroupUser findByUserAndGroup(User user, Object findByName);
+    //PickemGroupUser findByUserAndGroup(User user, Object findByName);
     
+    boolean existsByUsernameAndGrpname(String user, String group);
+    
+    List<PickemGroupUser> findByGrpname(String group);
 }
