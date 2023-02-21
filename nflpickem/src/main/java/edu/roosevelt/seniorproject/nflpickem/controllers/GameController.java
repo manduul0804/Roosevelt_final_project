@@ -4,14 +4,25 @@
  */
 package edu.roosevelt.seniorproject.nflpickem.controllers;
 
+import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
+import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,18 +34,58 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     
-    @Autowired
-    UserRepository users;
-    
+  
     @Autowired
     GameRepository games;
     
-    @Autowired
-    PickemGroupRepository groups;
+    @GetMapping("/nflpickem/games/allgames")
+    public ResponseEntity<List<Game>> getallGames(HttpSession session){
+        
+        return new ResponseEntity(games.findAll(), HttpStatus.OK);
+    }
     
-    @Autowired
-    PickemGroupUserRepository groupusers;
+    @GetMapping("/nflpickem/games/{week}")
+    public ResponseEntity<Game> getGameByWeek(@PathVariable("week") Integer week, HttpSession session)  throws SQLException{
+       //get them from the repository
+        Iterable<Game> game = games.findByWeek(week);
+        //return them
+        return new ResponseEntity(game, HttpStatus.OK);
+      
+    }  
     
+     @DeleteMapping("/nflpickem/games/{gameid}")
+    public ResponseEntity<String> deleteGame(@PathVariable("gameid") Integer gameid) throws SQLException {
+        
+        if (games.existsById(gameid)) {
+            //delete it!
+            games.deleteById(gameid);
+            //return result
+            return new ResponseEntity(gameid, HttpStatus.OK);
+        } else {
+            //not there
+            return new ResponseEntity(gameid, HttpStatus.NOT_FOUND);
+        }
+        
+        
+    }
+  
+    }
+    
+    
+    
+    
+    
+    
+    
+
+    
+   
+    
+    
+    
+    
+    
+  
     //base url for all requests should be:
     // -> /nflpickem/games
-}
+

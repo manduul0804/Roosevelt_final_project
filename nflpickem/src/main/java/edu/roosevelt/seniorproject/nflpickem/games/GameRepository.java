@@ -12,5 +12,7 @@ import org.springframework.data.repository.CrudRepository;
  * @author mruth
  */
 public interface GameRepository extends CrudRepository<Game, Integer>{
+
+    public Iterable<Game> findByWeek(Integer week);
     
 }
