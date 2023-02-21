@@ -4,14 +4,22 @@
  */
 package edu.roosevelt.seniorproject.nflpickem.controllers;
 
+import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
+import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -26,6 +34,27 @@ public class GameController {
     @Autowired
     UserRepository users;
     
+    //simplifying code bit by bit
+    private boolean isLoggedIn(HttpSession session) {
+         if (session.getAttribute("user") != null) {
+             return true;
+         } else {
+             return false;
+         }
+    }
+    
+    private boolean isAdmin(HttpSession session) {
+        if (session.getAttribute("user") != null) {
+            //user is logged in, will get data
+            if (session.getAttribute("admin") != null) {
+                return true;
+            }
+            
+        } 
+        return false;
+    }
+    
+    
     @Autowired
     GameRepository games;
     
@@ -34,6 +63,17 @@ public class GameController {
     
     @Autowired
     PickemGroupUserRepository groupusers;
+    
+    @GetMapping("/nflpickem/games/{week}")
+    public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
+        if (isLoggedIn(session)) {
+            return new ResponseEntity(games.findByWeek(week),HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    
+    
+    }
     
     //base url for all requests should be:
     // -> /nflpickem/games

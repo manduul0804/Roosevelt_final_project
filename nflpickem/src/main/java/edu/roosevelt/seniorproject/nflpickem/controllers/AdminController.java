@@ -35,7 +35,5 @@ public class AdminController {
     @Autowired
     PickemGroupUserRepository groupusers;
     
-    //base url for all requests should be:
-    // -> /nflpickem/admin
     
 }
