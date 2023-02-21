@@ -161,15 +161,24 @@ public class UserController {
     // Updates a user using PUT
     @PutMapping(value = "/nflpickem/updateuser", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@RequestBody final User u, HttpSession session) throws SQLException {
-        // Checks if the username exists
-        if (users.existsById(u.getUsername())) {
-            // User found, now update
-            users.save(u);
-            return new ResponseEntity(u, HttpStatus.OK);
+        // Checks if the user is logged in
+        if (this.isLoggedIn(session)) {
+            // Ensures the logged in user matches the user in which they want to update or if they have admin privileges. 
+            if ((session.getAttribute("user").equals(u.getUsername()) || this.isAdmin(session))) {
+                if ((users.existsById(u.getUsername()))) {
+                    // User found, now update
+                    users.save(u);
+                    return new ResponseEntity(u, HttpStatus.OK);
+                } else {
+                    // User not found, return 404 error
+                    return new ResponseEntity(u, HttpStatus.NOT_FOUND);
+                }
+
+            } else {
+                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+            }
         } else {
-            // User not found, return 404 error
-            return new ResponseEntity(u, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-        
     }
 }
