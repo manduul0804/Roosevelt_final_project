@@ -69,6 +69,7 @@ public class GameController {
     
     // Find games by a given week
     @GetMapping("/nflpickem/games/{week}")
+<<<<<<< Updated upstream
     public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
         if (isLoggedIn(session)) {
             return new ResponseEntity(games.findByWeek(week),HttpStatus.OK);
@@ -78,6 +79,21 @@ public class GameController {
     
     
     }
+=======
+    public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session)  throws SQLException{
+      if(isLoggedIn(session)){
+          
+          
+      }else{
+          return new ResponseEntity(null,HttpStatus.UNAUTHORIZED);
+      }
+        //get them from the repository
+        Iterable<Game> game = games.findByWeek(week);
+        //return them
+        return new ResponseEntity(game, HttpStatus.OK);
+      
+    }  
+>>>>>>> Stashed changes
      
     //delete games based on a game id.
      @DeleteMapping("/nflpickem/games/{gameid}")

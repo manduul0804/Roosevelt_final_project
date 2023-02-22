@@ -5,6 +5,7 @@
 package edu.roosevelt.seniorproject.nflpickem.games;
 
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,6 +14,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface GameRepository extends CrudRepository<Game, Integer>{
 
-    public Iterable<Game> findByWeek(Integer week);
+    List<Game> findByWeek(int week);
     
 }
