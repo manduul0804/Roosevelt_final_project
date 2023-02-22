@@ -13,6 +13,7 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface PickRepository extends CrudRepository<Pick, Integer>{
     
-    List<Pick> findByUsernameAndGrpname(String user, String grp);
+    List<Pick> findByUsernameAndGrpname(String user, String group);
+    
     
 }

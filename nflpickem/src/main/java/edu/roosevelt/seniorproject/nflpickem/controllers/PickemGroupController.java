@@ -5,13 +5,21 @@
 package edu.roosevelt.seniorproject.nflpickem.controllers;
 
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
+import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroup;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
+import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
+import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
+import jakarta.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,7 +42,68 @@ public class PickemGroupController {
     
     @Autowired
     PickemGroupUserRepository groupusers;
+  
+  //checking if session is good
+    @GetMapping("/nflpickem/groups")
+  public String testGroups(HttpSession session) {
+    if (session != null && session.getAttribute("user") != null) {
+      return (String)session.getAttribute("groupusers");
+      
+  } else if (session != null) {
+      return "good session, no att";
+  } else {
+      return "no session";
+  }
+}
+
+//creating a group
+@PostMapping("/nflpickem/groups/create")
+  public ResponseEntity<String> createGroup(HttpSession session, String groupname) {
+    if (isLoggedIn(session)) {
+      if (groups.findByName(groupname) == null) {
+        //group doesn't exist, create it
+        groups.save(new PickemGroup());
+        //add user to group
+        User user = users.findByUsername((String)session.getAttribute("user"));
+        groupusers.save(new PickemGroupUser());
+        return ResponseEntity.ok("Group created");
+      } else {
+        return ResponseEntity.badRequest().body("Group already exists");
+      }
+    } else {
+      return ResponseEntity.badRequest().body("User not logged in");
+    }
+  }
     
+    //checking if user is logged in
+    private boolean isLoggedIn(HttpSession session) {
+      if (session.getAttribute("user") != null) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    
+    //checking if user is admin
+    private boolean isAdmin(HttpSession session) {
+      if (session.getAttribute("user") != null) {
+          //user is logged in, will get data
+          if (session.getAttribute("admin") != null) {
+              return true;
+          }
+          
+      } 
+      return false;
+  }
+    
+    
+    
+    
+    
+   
+
+
+  }
     //base url for all requests should be:
     // -> /nflpickem/groups 
-}
+

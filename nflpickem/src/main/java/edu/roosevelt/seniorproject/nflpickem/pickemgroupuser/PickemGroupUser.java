@@ -80,4 +80,19 @@ public class PickemGroupUser {
     public void setDone(boolean done) {
         this.done = done;
     }
+
+    public boolean getIsAdmin() {
+        return false;
+    }
+
+    public boolean getIsLeader() {
+        return false;
+    }
+
+    public boolean getIsMember() {
+        return false;
+    }
+
+    public void setIsMember(boolean b) {
+    }
 }
