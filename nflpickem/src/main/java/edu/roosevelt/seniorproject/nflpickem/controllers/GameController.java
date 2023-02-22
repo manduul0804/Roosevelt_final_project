@@ -34,10 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     
+
   
-    @Autowired
-    GameRepository games;
-    
+  
     
     //Find ALL games
     @GetMapping("/nflpickem/games/allgames")
@@ -47,6 +46,24 @@ public class GameController {
     }
     
     //simplifying code bit by bit
+
+   @Autowired
+    UserRepository users;
+    
+    @Autowired
+    GameRepository games;
+    
+    @Autowired
+    PickemGroupRepository groups;
+    
+    @Autowired
+    PickemGroupUserRepository groupusers;
+     
+   
+      
+
+//simplifying code bit by bit
+
     private boolean isLoggedIn(HttpSession session) {
          if (session.getAttribute("user") != null) {
              return true;
@@ -67,9 +84,9 @@ public class GameController {
     }
     
     
-    // Find games by a given week
+
     @GetMapping("/nflpickem/games/{week}")
-<<<<<<< Updated upstream
+
     public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
         if (isLoggedIn(session)) {
             return new ResponseEntity(games.findByWeek(week),HttpStatus.OK);
@@ -79,21 +96,8 @@ public class GameController {
     
     
     }
-=======
-    public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session)  throws SQLException{
-      if(isLoggedIn(session)){
-          
-          
-      }else{
-          return new ResponseEntity(null,HttpStatus.UNAUTHORIZED);
-      }
-        //get them from the repository
-        Iterable<Game> game = games.findByWeek(week);
-        //return them
-        return new ResponseEntity(game, HttpStatus.OK);
-      
-    }  
->>>>>>> Stashed changes
+
+    
      
     //delete games based on a game id.
      @DeleteMapping("/nflpickem/games/{gameid}")
@@ -131,6 +135,3 @@ public class GameController {
     
     
   
-    //base url for all requests should be:
-    // -> /nflpickem/games
-
