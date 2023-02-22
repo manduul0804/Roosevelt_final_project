@@ -9,6 +9,7 @@ import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -18,9 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,10 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    
+
     @Autowired
     UserRepository users;
-    
+
     @GetMapping("/home")
     public String testHome(HttpSession session) {
         if (session != null && session.getAttribute("user") != null) {
@@ -91,7 +94,7 @@ public class UserController {
         } 
         return new ResponseEntity(user, HttpStatus.UNAUTHORIZED);
     }
-    //add user
+    //add user(JESUS' CODE)
   @PostMapping(value = "/nflpickem/user/insertuser", consumes = MediaType.APPLICATION_JSON_VALUE)  
   public ResponseEntity<User> insertUser (@RequestBody final User u, HttpSession session) {
       if (users.existsById(u.getUsername())) {
@@ -99,6 +102,7 @@ public class UserController {
           return new ResponseEntity(u,HttpStatus.FOUND);
       }else{
           //add to your db
+          users.save(u);
           return new ResponseEntity(u,HttpStatus.OK);
       }
   }  
@@ -161,12 +165,66 @@ public class UserController {
         
         
         
-    }
+    } 
+
+    //KAREN'S CODE
+    @DeleteMapping("/nflpickem/users/{username}")
+    public ResponseEntity<String> deleteUser(@PathVariable("username") String username, HttpSession session){
+
+//get the logged in user (maybe null if not logged in
+                //get user admin status
+        //check for good return
+        if (this.isAdmin(session)) {
+            
+            //does it exist?
+            if (users.existsById(username)) {
+                users.deleteById(username);
+                 //already there
+                    return new ResponseEntity(username, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+                }
+
+            } else {
+                //add it
+                return new ResponseEntity(username, HttpStatus.NOT_FOUND);
+            }
+
+        }
+    
+    
+    
+    
+    
+    
     @GetMapping("/nflpickem/user/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "OK";
     }
     
+    //OMARS' CODE
+   @PutMapping(value = "/nflpickem/updateuser", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> updateUser(@RequestBody final User u, HttpSession session) throws SQLException {
+        // Checks if the user is logged in
+        if (this.isLoggedIn(session)) {
+            // Ensures the logged in user matches the user in which they want to update or if they have admin privileges. 
+            if ((session.getAttribute("user").equals(u.getUsername()) || this.isAdmin(session))) {
+                if ((users.existsById(u.getUsername()))) {
+                    // User found, now update
+                    users.save(u);
+                    return new ResponseEntity(u, HttpStatus.OK);
+                } else {
+                    // User not found, return 404 error
+                    return new ResponseEntity(u, HttpStatus.NOT_FOUND);
+                }
+
+            } else {
+                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }    
     
 }
