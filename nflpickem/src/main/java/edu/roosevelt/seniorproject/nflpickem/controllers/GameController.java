@@ -18,11 +18,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -62,31 +65,21 @@ public class GameController {
    
       
 
-//simplifying code bit by bit
 
-    private boolean isLoggedIn(HttpSession session) {
-         if (session.getAttribute("user") != null) {
-             return true;
-         } else {
-             return false;
-         }
-    }
-    
-    private boolean isAdmin(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            //user is logged in, will get data
-            if (session.getAttribute("admin") != null) {
-                return true;
-            }
-            
-        } 
-        return false;
+    //Just a general get all games 
+     @GetMapping("/nflpickem/games/allgames")
+    public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
+        //return it
+        return new ResponseEntity(users.findAll(), HttpStatus.OK);
+        
     }
     
     
-
+    
+    
+    
+     //Get games by a specific week. You need to be logged in for this to work.
     @GetMapping("/nflpickem/games/{week}")
-
     public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
         if (isLoggedIn(session)) {
             return new ResponseEntity(games.findByWeek(week),HttpStatus.OK);
@@ -114,6 +107,46 @@ public class GameController {
         }
         
         
+        
+        
+    }
+    //update games score for team 1
+    @PutMapping(value="/nflpickem/updategames",consumes=MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<Game> updateGame(@RequestBody final Game g, HttpSession session)throws SQLException{
+    if(this.isLoggedIn(session)){
+        if((session.getAttribute("Game").equals(g.getTeam1score()) ||this.isAdmin(session))){
+            if((games.existsById( g.getTeam1score()))) {
+                games.save(g);
+                return new ResponseEntity(g,HttpStatus.OK);
+
+                }else{
+                  return new ResponseEntity(g,HttpStatus.NOT_FOUND);
+                  }}else{
+                        return new ResponseEntity(null,HttpStatus.UNAUTHORIZED);
+        } }else
+            return new ResponseEntity(null,HttpStatus.UNAUTHORIZED);
+
+                 }
+    
+    //simplifying code bit by bit
+    //login and admin stuff from class
+    private boolean isLoggedIn(HttpSession session) {
+         if (session.getAttribute("user") != null) {
+             return true;
+         } else {
+             return false;
+         }
+    }
+    
+    private boolean isAdmin(HttpSession session) {
+        if (session.getAttribute("user") != null) {
+            //user is logged in, will get data
+            if (session.getAttribute("admin") != null) {
+                return true;
+            }
+            
+        } 
+        return false;
     }
     
     
