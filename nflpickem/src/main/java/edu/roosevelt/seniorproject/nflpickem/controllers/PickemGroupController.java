@@ -53,106 +53,89 @@ public class PickemGroupController {
     //base url for all requests should be:
     // -> /nflpickem/groups
     
-    // check for a valid session
-    @GetMapping("/nflpickem/groups")
-  public String testGroups(HttpSession session) {
-    if (session != null && session.getAttribute("user") != null) {
-      return (String)session.getAttribute("groupusers");
-
-  } else if (session != null) {
-      return "good session, no att";
-  } else {
-      return "no session";
-  }
-}
-    
-    // check to see if user is logged in
+    // checks to see if user is logged in
     private boolean isLoggedIn(HttpSession session) {
-      if (session.getAttribute("user") != null) {
-        return true;
-      } else {
-        return false;
-      }
+        if (session.getAttribute("user") != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // checks for a valid session
+    @GetMapping("/nflpickem/groups")
+    public String testGroups(HttpSession session) {
+        if (session != null && session.getAttribute("user") != null) {
+            return (String)session.getAttribute("groupusers");
+        } else if (session != null) {
+            return "good session, att";
+        } else {
+            return "no session";
+        }
     }
     
-    // check to see if user is an Admin
+    // checks to see if user is an Admin
     private boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
             if (session.getAttribute("admin") != null) {
                 return true;
             }
-        } 
+        }
         return false;
     }
-    
+
     // create a group
-    @PostMapping("/nflpickem/groups/create")
-    public ResponseEntity<String> createGroup(HttpSession session, String name) {
-        if (isLoggedIn(session)) {
-            if (groups.existsByID(name) == null) {
-                // if group doesn't exist, create a new one
-                groups.save(new PickemGroup());
-                return new ResponseEntity(name, HttpStatus.OK);
-            } else {
-                return ResponseEntity.badRequest().body("Group already exists");
-            }
+    @PostMapping(value = "/nflpickem/groups/creategroup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PickemGroup> createGroup (@RequestBody final PickemGroup grp, HttpSession session) {
+        if (groups.existsById(grp.getName())) {
+            // if user exists:
+            return new ResponseEntity(grp, HttpStatus.FOUND);
         } else {
-            return ResponseEntity.badRequest().body("User not logged in");
+            // create new group
+            groups.save(grp);
+            return new ResponseEntity(grp, HttpStatus.OK);
         }
     }
     
     // edit/update a group
-    @PutMapping(value = "/nflpickem/groups/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PickemGroup> editGroup (@RequestBody final PickemGroup name, HttpSession session) throws SQLException {
-        // check if group exists
-        if (groups.existsById(name.getName())) {
-            // edit group after it's found
-            groups.save(name);
-            return new ResponseEntity(name, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(name, HttpStatus.NOT_FOUND);
-        }
-    }
-    
-    // delete a group
-    @DeleteMapping("/nflpickem/groups/delete")
-    public ResponseEntity<String> deleteGroup(@PathVariable("name") String name){
-
-        if (groups.existsById(name)){
-            this.deleteGroup(name);
-            return new ResponseEntity(name, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(name, HttpStatus.NOT_FOUND);
-        }
-    }
-    
-    // view all groups as an admin
-    @GetMapping("/nflpickem/groups/allgroups")
-    public ResponseEntity<List<PickemGroup>> getAllGroups(HttpSession session) {
-        
-        if (this.isAdmin(session)) {
-            return new ResponseEntity(groups.findAll(), HttpStatus.OK);
+    @PutMapping(value = "/nflpickem/groups/editgroup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PickemGroup> editGroup (@RequestBody final PickemGroup grp, HttpSession session) throws SQLException {
+        if (this.isLoggedIn(session)) {
+            if ((session.getAttribute("user").equals(grp.getName()) || this.isAdmin(session))) {
+                if ((users.existsById(grp.getName()))) {
+                    groups.save(grp);
+                    return new ResponseEntity(grp, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(grp, HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+            }
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
     
-    // view all groups as a regular user
-    @GetMapping("/nflpickem/groups/allgroups2")
-    public ResponseEntity<List<PickemGroup>> getAllGroups2(HttpSession session) {
-        
-        return new ResponseEntity(groups.findAll(), HttpStatus.OK);
-    }
-    
-    // view a specific group
-    @GetMapping("/nflpickem/groups/{name}")
-    public ResponseEntity<List<PickemGroup>> findGroup(@PathVariable("name") String name){
-        
-        if (groups.existsById(name)){
-            this.findGroup(name);
-            return new ResponseEntity(name, HttpStatus.FOUND);
+    // delete a group
+    @DeleteMapping("/nflpickem/groups/{name}")
+    public ResponseEntity<String> deleteGroup(@PathVariable("name") String name, HttpSession session){
+
+        if (this.isAdmin(session)) {
+            if (groups.existsById(name)) {
+                groups.deleteById(name);
+                return new ResponseEntity(name, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            }
         } else {
-            return new ResponseEntity(name, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(name, HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    // log out
+    @GetMapping("/nflpickem/user/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "OK";
+    }   
 }
