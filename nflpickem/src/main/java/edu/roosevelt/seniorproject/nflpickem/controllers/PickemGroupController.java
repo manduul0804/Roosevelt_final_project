@@ -61,18 +61,6 @@ public class PickemGroupController {
             return false;
         }
     }
-
-    // checks for a valid session
-    @GetMapping("/nflpickem/groups")
-    public String testGroups(HttpSession session) {
-        if (session != null && session.getAttribute("user") != null) {
-            return (String)session.getAttribute("groupusers");
-        } else if (session != null) {
-            return "good session, att";
-        } else {
-            return "no session";
-        }
-    }
     
     // checks to see if user is an Admin
     private boolean isAdmin(HttpSession session) {
@@ -87,13 +75,20 @@ public class PickemGroupController {
     // create a group
     @PostMapping(value = "/nflpickem/groups/creategroup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PickemGroup> createGroup (@RequestBody final PickemGroup grp, HttpSession session) {
-        if (groups.existsById(grp.getName())) {
-            // if user exists:
-            return new ResponseEntity(grp, HttpStatus.FOUND);
+        if (this.isLoggedIn(session)) {
+            if (groups.existsById(grp.getName())) {
+                // if user exists:
+                return new ResponseEntity(grp, HttpStatus.FOUND);
+            } else {
+                if (!this.isAdmin(session)) {
+                    grp.setAdmin((String) session.getAttribute("user"));
+                }
+                // create new group
+                groups.save(grp);
+                return new ResponseEntity(grp, HttpStatus.OK);
+            }
         } else {
-            // create new group
-            groups.save(grp);
-            return new ResponseEntity(grp, HttpStatus.OK);
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
     
@@ -101,19 +96,29 @@ public class PickemGroupController {
     @PutMapping(value = "/nflpickem/groups/editgroup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PickemGroup> editGroup (@RequestBody final PickemGroup grp, HttpSession session) throws SQLException {
         if (this.isLoggedIn(session)) {
-            if ((session.getAttribute("user").equals(grp.getName()) || this.isAdmin(session))) {
-                if ((users.existsById(grp.getName()))) {
+            if ((groups.existsById(grp.getName()))) {
+                Optional<PickemGroup> og = groups.findById(grp.getName());
+                PickemGroup g = og.get();
+                if ((session.getAttribute("user").equals(g.getAdmin()) || this.isAdmin(session))) {
+                 
+                    
+                    g.setType(grp.getType());
                     groups.save(grp);
                     return new ResponseEntity(grp, HttpStatus.OK);
                 } else {
-                    return new ResponseEntity(grp, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
                 }
+                
+                
+            } else {
+                return new ResponseEntity(grp, HttpStatus.NOT_FOUND);
+            }
+            
+            
+                
             } else {
                 return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        }
     }
     
     // delete a group
@@ -131,11 +136,4 @@ public class PickemGroupController {
             return new ResponseEntity(name, HttpStatus.UNAUTHORIZED);
         }
     }
-    
-    // log out
-    @GetMapping("/nflpickem/user/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "OK";
-    }   
 }
