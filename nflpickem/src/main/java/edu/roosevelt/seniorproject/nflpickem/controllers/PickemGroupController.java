@@ -26,7 +26,6 @@ import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,9 +63,9 @@ public class PickemGroupController {
     @Autowired
     PickemGroupUserRepository groupusers;
 
-   
-
-    //checking if user is logged in
+    //base url for all requests should be:
+    // -> /nflpickem/groups
+    // checks to see if user is logged in
     private boolean isLoggedIn(HttpSession session) {
         if (session.getAttribute("user") != null) {
             return true;
@@ -77,6 +75,7 @@ public class PickemGroupController {
     }
 
     //checking if user is admin
+    // checks to see if user is an Admin
     private boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
             //user is logged in, will get data
@@ -89,18 +88,62 @@ public class PickemGroupController {
     }
 
     
-    // view all groups as an admin
+    
+    // BEGINNING OF ETHAN'S CODE
+    // create a group
+    @PostMapping(value = "/nflpickem/groups/creategroup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PickemGroup> createGroup(@RequestBody final PickemGroup grp, HttpSession session) {
+        if (this.isLoggedIn(session)) {
+            if (groups.existsById(grp.getName())) {
+                // if group exists:
+                return new ResponseEntity(grp, HttpStatus.FOUND);
+            } else {
+                if (!this.isAdmin(session)) {
+                    grp.setAdmin((String) session.getAttribute("user"));
+                }
+                // create new group
+                groups.save(grp);
+                return new ResponseEntity(grp, HttpStatus.OK);
+            }
+        }
+    }
+        // view all groups as an admin
     @GetMapping("/nflpickem/groups/allgroups")
     public ResponseEntity<List<PickemGroup>> getAllGroups(HttpSession session) {
 
         if (this.isAdmin(session)) {
             return new ResponseEntity(groups.findAll(), HttpStatus.OK);
+        
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
     
     
+    
+            
+
+    // edit/update a group
+    @PutMapping(value = "/nflpickem/groups/editgroup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PickemGroup> editGroup(@RequestBody final PickemGroup grp, HttpSession session) throws SQLException {
+        if (this.isLoggedIn(session)) {
+            if (groups.existsById(grp.getName())) {
+                Optional<PickemGroup> og = groups.findById(grp.getName());
+                PickemGroup g = og.get();
+                if ((session.getAttribute("user").equals(g.getAdmin()) || this.isAdmin(session))) {
+                    g.setType(grp.getType());
+                    groups.save(grp);
+                    return new ResponseEntity(grp, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity(grp, HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
     @GetMapping("/nflpickem/groups/allgroups/{username}")
     public ResponseEntity<List<PickemGroupUser>> getAllGroups(@PathVariable("username") String username, HttpSession session) {
 
@@ -112,7 +155,11 @@ public class PickemGroupController {
                 return new ResponseEntity(groupusers.findByUsername(username), HttpStatus.OK);
                 
             }
-            
+        
+        
+        
+        
+        
         }
         
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
@@ -120,7 +167,28 @@ public class PickemGroupController {
         
     }
 
-}
+
 //base url for all requests should be:
 // -> /nflpickem/groups 
 
+    // delete a group
+    @DeleteMapping("/nflpickem/groups/{groupname}")
+    public ResponseEntity<String> deleteGroup(@PathVariable("groupname") String groupname, HttpSession session) {
+        if (this.isLoggedIn(session)) {
+            if (this.isAdmin(session)) {
+                if (groups.existsById(groupname)) {
+                    groups.deleteById(groupname);
+                    return new ResponseEntity(groupname, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    // END OF ETHAN'S CODE
+}
