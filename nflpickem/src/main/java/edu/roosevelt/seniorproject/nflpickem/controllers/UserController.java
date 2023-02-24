@@ -35,13 +35,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    
+
     @Autowired
     UserRepository users;
-    
-    @Autowired
-    UserRepository userService;
-    
+
+
     @GetMapping("/home")
     public String testHome(HttpSession session) {
         if (session != null && session.getAttribute("user") != null) {
@@ -74,7 +72,7 @@ public class UserController {
         return false;
     }
     
-    @PostMapping("/nflpickem/user/login")
+    @PostMapping(value = "/nflpickem/user/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> login(@RequestBody final User user, HttpSession session) {
         //does user exist
         
@@ -96,7 +94,20 @@ public class UserController {
         } 
         return new ResponseEntity(user, HttpStatus.UNAUTHORIZED);
     }
+   
     
+  @PostMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)  
+  public ResponseEntity<User> insertUser (@RequestBody final User u, HttpSession session) {
+      if (users.existsById(u.getUsername())) {
+          //If user exists
+          return new ResponseEntity(u,HttpStatus.FOUND);
+      }else{
+          //add to your db
+          users.save(u);
+          return new ResponseEntity(u,HttpStatus.OK);
+      }
+  }  
+     
     @GetMapping("/nflpickem/user/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username, HttpSession session) {
         
@@ -182,8 +193,8 @@ public class UserController {
         return "OK";
     }
     
-    // Updates a user using PUT
-    @PutMapping(value = "/nflpickem/updateuser", consumes = MediaType.APPLICATION_JSON_VALUE)
+    
+   @PutMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@RequestBody final User u, HttpSession session) throws SQLException {
         // Checks if the user is logged in
         if (this.isLoggedIn(session)) {
