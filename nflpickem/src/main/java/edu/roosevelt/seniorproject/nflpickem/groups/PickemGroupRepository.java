@@ -13,6 +13,7 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface PickemGroupRepository extends CrudRepository<PickemGroup, String>{
 
-    Object findByName(String groupname);
+    PickemGroup findByName(String groupname);
+    
     
 }
