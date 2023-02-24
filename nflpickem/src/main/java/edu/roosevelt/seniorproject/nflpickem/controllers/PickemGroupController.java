@@ -110,7 +110,26 @@ public class PickemGroupController {
     }
     
     
-    
+    @GetMapping("/nflpickem/groups/leaderboard/{group}") 
+    public ResponseEntity<List<PickemGroupUser>> getGroupLeaderboard(@PathVariable("group") String group, HttpSession session) { 
+
+        if (isLoggedIn(session)) { 
+
+            String username = (String)session.getAttribute("user"); 
+
+            if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) { 
+
+                List<PickemGroupUser> standings = groupusers.findByGrpname(group); 
+
+                return new ResponseEntity(standings, HttpStatus.OK); 
+
+            }  
+
+        } 
+
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED); 
+        
+    }
             
 
     // edit/update a group
