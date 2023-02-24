@@ -8,11 +8,9 @@ import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroup;
-import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,23 +33,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class PickemGroupController {
-   private static final Logger logger = LoggerFactory.getLogger(PickemGroupController.class);
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(PickemGroupController.class);
+
     @Autowired
     UserRepository users;
-    
+
     @Autowired
     GameRepository games;
-    
+
     @Autowired
     PickemGroupRepository groups;
-    
+
     @Autowired
     PickemGroupUserRepository groupusers;
-    
+
     //base url for all requests should be:
     // -> /nflpickem/groups
-    
     // checks to see if user is logged in
     private boolean isLoggedIn(HttpSession session) {
         if (session.getAttribute("user") != null) {
@@ -61,7 +58,7 @@ public class PickemGroupController {
             return false;
         }
     }
-    
+
     // checks to see if user is an Admin
     private boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
@@ -71,19 +68,18 @@ public class PickemGroupController {
         }
         return false;
     }
-    
-    // BEGINNING OF ETHAN'S CODE
 
+    // BEGINNING OF ETHAN'S CODE
     // create a group
     @PostMapping(value = "/nflpickem/groups/creategroup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PickemGroup> createGroup (@RequestBody final PickemGroup grp, HttpSession session) {
+    public ResponseEntity<PickemGroup> createGroup(@RequestBody final PickemGroup grp, HttpSession session) {
         if (this.isLoggedIn(session)) {
             if (groups.existsById(grp.getName())) {
                 // if group exists:
                 return new ResponseEntity(grp, HttpStatus.FOUND);
             } else {
                 if (!this.isAdmin(session)) {
-                    grp.setAdmin((String)session.getAttribute("user"));
+                    grp.setAdmin((String) session.getAttribute("user"));
                 }
                 // create new group
                 groups.save(grp);
@@ -93,10 +89,10 @@ public class PickemGroupController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
+
     // edit/update a group
     @PutMapping(value = "/nflpickem/groups/editgroup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PickemGroup> editGroup (@RequestBody final PickemGroup grp, HttpSession session) throws SQLException {
+    public ResponseEntity<PickemGroup> editGroup(@RequestBody final PickemGroup grp, HttpSession session) throws SQLException {
         if (this.isLoggedIn(session)) {
             if (groups.existsById(grp.getName())) {
                 Optional<PickemGroup> og = groups.findById(grp.getName());
@@ -110,15 +106,15 @@ public class PickemGroupController {
                 }
             } else {
                 return new ResponseEntity(grp, HttpStatus.NOT_FOUND);
-            }    
-            } else {
-                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
             }
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
     }
-    
+
     // delete a group
     @DeleteMapping("/nflpickem/groups/{groupname}")
-    public ResponseEntity<String> deleteGroup(@PathVariable("groupname") String groupname, HttpSession session){
+    public ResponseEntity<String> deleteGroup(@PathVariable("groupname") String groupname, HttpSession session) {
         if (this.isLoggedIn(session)) {
             if (this.isAdmin(session)) {
                 if (groups.existsById(groupname)) {
@@ -130,10 +126,10 @@ public class PickemGroupController {
             } else {
                 return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
             }
-            } else {
+        } else {
             return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
-            }
+        }
     }
-    
+
     // END OF ETHAN'S CODE
 }
