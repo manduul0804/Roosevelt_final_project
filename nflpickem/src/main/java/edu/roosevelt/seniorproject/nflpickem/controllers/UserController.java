@@ -8,18 +8,21 @@ import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -177,6 +180,30 @@ public class UserController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "OK";
+    }
+    
+    // Updates a user using PUT
+    @PutMapping(value = "/nflpickem/updateuser", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> updateUser(@RequestBody final User u, HttpSession session) throws SQLException {
+        // Checks if the user is logged in
+        if (this.isLoggedIn(session)) {
+            // Ensures the logged in user matches the user in which they want to update or if they have admin privileges. 
+            if ((session.getAttribute("user").equals(u.getUsername()) || this.isAdmin(session))) {
+                if ((users.existsById(u.getUsername()))) {
+                    // User found, now update
+                    users.save(u);
+                    return new ResponseEntity(u, HttpStatus.OK);
+                } else {
+                    // User not found, return 404 error
+                    return new ResponseEntity(u, HttpStatus.NOT_FOUND);
+                }
+
+            } else {
+                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
     }
 }
 
