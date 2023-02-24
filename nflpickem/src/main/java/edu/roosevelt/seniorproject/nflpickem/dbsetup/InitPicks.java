@@ -43,6 +43,7 @@ public class InitPicks {
                     sql = sql + "'" + users[i] + "',";
                     sql = sql + "'" + grps[i] + "',";
                     sql = sql + "" + ++gameID + ",";
+                    sql = sql + "" + 1 + ",";
                     sql = sql + "'NO')";
                     
                     
