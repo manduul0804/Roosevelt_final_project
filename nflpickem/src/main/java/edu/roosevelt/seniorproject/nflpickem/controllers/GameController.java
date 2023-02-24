@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class GameController {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
     //simplifying code bit by bit
@@ -45,35 +45,28 @@ public class GameController {
             return false;
         }
     }
-
+    
     private boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
             //user is logged in, will get data
             if (session.getAttribute("admin") != null) {
                 return true;
             }
-
+            
         }
         return false;
-    }
-
-    //Find ALL games
-    @GetMapping("/nflpickem/games/allgames")
-    public ResponseEntity<List<Game>> getallGames(HttpSession session) {
-
-        return new ResponseEntity(games.findAll(), HttpStatus.OK);
     }
 
     //simplifying code bit by bit
     @Autowired
     UserRepository users;
-
+    
     @Autowired
     GameRepository games;
-
+    
     @Autowired
     PickemGroupRepository groups;
-
+    
     @Autowired
     PickemGroupUserRepository groupusers;
 
@@ -98,20 +91,20 @@ public class GameController {
     }
 
     //Get games by a specific week. You need to be logged in for this to work.
-    @GetMapping("/nflpickem/games/{week}")
+    @GetMapping("/nflpickem/games/byweek/{week}")
     public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
         if (isLoggedIn(session)) {
             return new ResponseEntity(games.findByWeek(week), HttpStatus.OK);
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-
+        
     }
 
     //delete games based on a game id.
     @DeleteMapping("/nflpickem/games/{gameid}")
     public ResponseEntity<String> deleteGame(@PathVariable("gameid") Integer gameid, HttpSession session) throws SQLException {
-
+        
         if (this.isAdmin(session)) {
             if (games.existsById(gameid)) {
                 //delete it!
@@ -125,13 +118,13 @@ public class GameController {
         } else {
             return new ResponseEntity(gameid, HttpStatus.UNAUTHORIZED);
         }
-
+        
     }
 
     //update games score for team 1
     @PutMapping(value = "/nflpickem/games/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> updateGame(@RequestBody final Game g, HttpSession session) throws SQLException {
-
+        
         if (this.isAdmin(session)) {
             if (games.existsById(g.getGameid())) {
                 Optional<Game> opt = games.findById(g.getGameid());
@@ -152,22 +145,21 @@ public class GameController {
                 //save the real entry
                 games.save(real);
                 return new ResponseEntity(real, HttpStatus.OK);
-
+                
             } else {
                 return new ResponseEntity(g, HttpStatus.NOT_FOUND);
             }
-
+            
         } else {
             //unauthorized
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
-    
+
     //update games score for team 1
     @PutMapping(value = "/nflpickem/games/updatescore", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> updateGameScores(@RequestBody final Game g, HttpSession session) throws SQLException {
-
+        
         if (this.isAdmin(session)) {
             if (games.existsById(g.getGameid())) {
                 Optional<Game> opt = games.findById(g.getGameid());
@@ -178,16 +170,15 @@ public class GameController {
                 //save the real entry
                 games.save(real);
                 return new ResponseEntity(real, HttpStatus.OK);
-
+                
             } else {
                 return new ResponseEntity(g, HttpStatus.NOT_FOUND);
             }
-
+            
         } else {
             //unauthorized
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
     
-
 }
