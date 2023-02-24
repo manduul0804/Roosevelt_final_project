@@ -152,29 +152,26 @@ public class UserController {
             
     @DeleteMapping("/nflpickem/users/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username, HttpSession session){
-                 
-        //get the logged in user (maybe null if not logged in
-        User loggedInUser = (User) session.getAttribute("user");
-        //get user admin status
-        boolean admin = session.getAttribute("admin") != null;
-        //check for good return
-        if (loggedInUser != null) {
-            //does it exist?
-            if (userService.existsById(username)) {
-                userService.deleteById(username);
-                 //already there
-                    return new ResponseEntity(username, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-                }
-                
+        //if admin
+        if (this.isAdmin(session)) {
+            //does it exist
+            if (users.existsById(username)) {
+                //it exists, get rid of it
+                users.deleteById(username);
+                //already there
+                return new ResponseEntity(username, HttpStatus.OK);
             } else {
-                //add it
+                //not there
                 return new ResponseEntity(username, HttpStatus.NOT_FOUND);
             }
-       
+            
         }
-      
+        //not authorized
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        
+
+    }
+
       
     @GetMapping("/nflpickem/user/logout")
     public String logout(HttpSession session) {
