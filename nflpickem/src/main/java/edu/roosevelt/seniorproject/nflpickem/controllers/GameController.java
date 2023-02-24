@@ -43,25 +43,7 @@ public class GameController {
     
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
-    //simplifying code bit by bit
-    private boolean isLoggedIn(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     
-    private boolean isAdmin(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            //user is logged in, will get data
-            if (session.getAttribute("admin") != null) {
-                return true;
-            }
-            
-        }
-        return false;
-    }
 
     //simplifying code bit by bit
     @Autowired
@@ -208,16 +190,7 @@ public class GameController {
         }
     }
     
-    @GetMapping("/nflpickem/games/{week}")
-    public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
-        if (isLoggedIn(session)) {
-            return new ResponseEntity(games.findByWeek(week),HttpStatus.OK);
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        }
     
-    
-    }
     
     //base url for all requests should be:
     // -> /nflpickem/games
