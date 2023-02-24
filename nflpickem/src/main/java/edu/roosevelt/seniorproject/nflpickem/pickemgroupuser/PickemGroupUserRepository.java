@@ -19,4 +19,6 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
     boolean existsByUsernameAndGrpname(String user, String group);
     
     List<PickemGroupUser> findByGrpname(String group);
+    
+    List<PickemGroupUser> findByUsername(String username);
 }
