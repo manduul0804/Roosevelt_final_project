@@ -71,17 +71,19 @@ public class PickemGroupController {
         }
         return false;
     }
+    
+    // BEGINNING OF ETHAN'S CODE
 
     // create a group
     @PostMapping(value = "/nflpickem/groups/creategroup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PickemGroup> createGroup (@RequestBody final PickemGroup grp, HttpSession session) {
         if (this.isLoggedIn(session)) {
             if (groups.existsById(grp.getName())) {
-                // if user exists:
+                // if group exists:
                 return new ResponseEntity(grp, HttpStatus.FOUND);
             } else {
                 if (!this.isAdmin(session)) {
-                    grp.setAdmin((String) session.getAttribute("user"));
+                    grp.setAdmin((String)session.getAttribute("user"));
                 }
                 // create new group
                 groups.save(grp);
@@ -96,44 +98,42 @@ public class PickemGroupController {
     @PutMapping(value = "/nflpickem/groups/editgroup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PickemGroup> editGroup (@RequestBody final PickemGroup grp, HttpSession session) throws SQLException {
         if (this.isLoggedIn(session)) {
-            if ((groups.existsById(grp.getName()))) {
+            if (groups.existsById(grp.getName())) {
                 Optional<PickemGroup> og = groups.findById(grp.getName());
                 PickemGroup g = og.get();
                 if ((session.getAttribute("user").equals(g.getAdmin()) || this.isAdmin(session))) {
-                 
-                    
                     g.setType(grp.getType());
                     groups.save(grp);
                     return new ResponseEntity(grp, HttpStatus.OK);
                 } else {
                     return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
                 }
-                
-                
             } else {
                 return new ResponseEntity(grp, HttpStatus.NOT_FOUND);
-            }
-            
-            
-                
+            }    
             } else {
                 return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
             }
     }
     
     // delete a group
-    @DeleteMapping("/nflpickem/groups/{name}")
-    public ResponseEntity<String> deleteGroup(@PathVariable("name") String name, HttpSession session){
-
-        if (this.isAdmin(session)) {
-            if (groups.existsById(name)) {
-                groups.deleteById(name);
-                return new ResponseEntity(name, HttpStatus.OK);
+    @DeleteMapping("/nflpickem/groups/{groupname}")
+    public ResponseEntity<String> deleteGroup(@PathVariable("groupname") String groupname, HttpSession session){
+        if (this.isLoggedIn(session)) {
+            if (this.isAdmin(session)) {
+                if (groups.existsById(groupname)) {
+                    groups.deleteById(groupname);
+                    return new ResponseEntity(groupname, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+                }
             } else {
-                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+                return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return new ResponseEntity(name, HttpStatus.UNAUTHORIZED);
-        }
+            } else {
+            return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
+            }
     }
+    
+    // END OF ETHAN'S CODE
 }
