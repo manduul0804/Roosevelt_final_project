@@ -72,7 +72,7 @@ public class UserController {
         return false;
     }
     
-    @PostMapping("/nflpickem/user/login")
+    @PostMapping(value = "/nflpickem/user/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> login(@RequestBody final User user, HttpSession session) {
         //does user exist
         
@@ -94,8 +94,9 @@ public class UserController {
         } 
         return new ResponseEntity(user, HttpStatus.UNAUTHORIZED);
     }
-    //add user(JESUS' CODE)
-  @PostMapping(value = "/nflpickem/user/insertuser", consumes = MediaType.APPLICATION_JSON_VALUE)  
+   
+    
+  @PostMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)  
   public ResponseEntity<User> insertUser (@RequestBody final User u, HttpSession session) {
       if (users.existsById(u.getUsername())) {
           //If user exists
@@ -204,7 +205,7 @@ public class UserController {
     }
     
     //OMARS' CODE
-   @PutMapping(value = "/nflpickem/updateuser", consumes = MediaType.APPLICATION_JSON_VALUE)
+   @PutMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@RequestBody final User u, HttpSession session) throws SQLException {
         // Checks if the user is logged in
         if (this.isLoggedIn(session)) {
