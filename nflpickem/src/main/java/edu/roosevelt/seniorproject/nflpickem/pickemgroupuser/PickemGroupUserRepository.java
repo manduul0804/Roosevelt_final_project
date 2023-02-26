@@ -21,4 +21,7 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
     List<PickemGroupUser> findByGrpname(String group);
     
     List<PickemGroupUser> findByUsername(String username);
+    
+    List<PickemGroupUser> findByUsernameAndStatus(String username, String status);
+    
 }

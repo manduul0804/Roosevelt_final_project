@@ -93,7 +93,7 @@ public class GameController {
     public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
         //is user logged in?
         if (this.isLoggedIn(session)) {
-            return new ResponseEntity(users.findAll(), HttpStatus.OK);
+            return new ResponseEntity(games.findAll(), HttpStatus.OK);
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
