@@ -14,6 +14,10 @@ import org.springframework.data.repository.CrudRepository;
 public interface PickRepository extends CrudRepository<Pick, Integer>{
     
     List<Pick> findByUsernameAndGrpname(String user, String group);
+    List<Pick> findByUsernameAndGrpnameAndWeek(String user, String group, int week);
+    
+    int countByWeek(int week);
+    
     
     
 }
