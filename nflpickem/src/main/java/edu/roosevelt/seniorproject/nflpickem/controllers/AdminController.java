@@ -85,20 +85,33 @@ public class AdminController {
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
+    }
         
-        @GetMapping("/nflpickem/users/{group}")
-        public ResponseEntity<List<PickemGroupUser>> getGroupHighScores(HttpSession session){
+    @GetMapping("/nflpickem/highscores/")
+    public ResponseEntity<List<PickemGroupUser>> getHighScores4EachGroupType(HttpSession session) {
+
+        //find by group type
+        List<String> grouptypes = groups.findGroupTypes();
+        for (String x : grouptypes) {
+            logger.info(x);
+        }
+        
+        
+        
+        
+        
         
         if (this.isAdmin(session)) {
-            return new ResponseEntity(grpname.findAll(), score.findAll(),HttpStatus.OK);
+            //return new ResponseEntity(grpname.findAll(), score.findAll(), HttpStatus.OK);
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-        
+
     }
         
         
         
-    }
+    
     
 }

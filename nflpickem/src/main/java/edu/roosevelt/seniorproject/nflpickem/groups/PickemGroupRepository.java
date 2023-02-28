@@ -5,6 +5,8 @@
 package edu.roosevelt.seniorproject.nflpickem.groups;
 
 
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -14,6 +16,9 @@ import org.springframework.data.repository.CrudRepository;
 public interface PickemGroupRepository extends CrudRepository<PickemGroup, String>{
 
     PickemGroup findByName(String groupname);
+    
+    @Query(value = "select distinct type from pickemgroup", nativeQuery = true)
+    List<String> findGroupTypes();
     
     
 
