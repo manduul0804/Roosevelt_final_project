@@ -86,7 +86,16 @@ public class AdminController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
         
+        @GetMapping("/nflpickem/users/{group}")
+        public ResponseEntity<List<PickemGroupUser>> getGroupHighScores(HttpSession session){
         
+        if (this.isAdmin(session)) {
+            return new ResponseEntity(grpname.findAll(), score.findAll(),HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+        
+    }
         
         
         
