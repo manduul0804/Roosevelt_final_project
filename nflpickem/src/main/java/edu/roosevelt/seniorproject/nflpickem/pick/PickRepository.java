@@ -20,4 +20,6 @@ public interface PickRepository extends CrudRepository<Pick, Integer>{
     int countByWeek(int week);
     
     
+    
+    
 }
