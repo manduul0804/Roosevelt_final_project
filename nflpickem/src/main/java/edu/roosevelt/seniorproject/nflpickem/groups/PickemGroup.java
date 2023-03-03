@@ -6,6 +6,7 @@ package edu.roosevelt.seniorproject.nflpickem.groups;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Objects;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Objects;
  * @author mruth
  */
 @Entity
+@Table(name="PICKEMGROUP ")
 public class PickemGroup {
     @Id
     String name;
