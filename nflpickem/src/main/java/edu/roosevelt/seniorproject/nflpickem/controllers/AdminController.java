@@ -7,6 +7,7 @@ package edu.roosevelt.seniorproject.nflpickem.controllers;
 import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
+import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
 import edu.roosevelt.seniorproject.nflpickem.user.User;
@@ -63,7 +64,21 @@ public class AdminController {
     @Autowired
     PickemGroupUserRepository groupusers;
     
+    @Autowired
+    PickRepository picks;
     
+    //OMAR NAVARRO -MR
+    @GetMapping("/nflpickem/admin/numpicks")
+    public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
+        if (this.isAdmin(session)) {
+
+            return new ResponseEntity(picks.count(), HttpStatus.UNAUTHORIZED);
+
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     
     
     @GetMapping("/nflpickem/admin/{group}")
