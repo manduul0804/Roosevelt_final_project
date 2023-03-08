@@ -5,6 +5,7 @@
 package edu.roosevelt.seniorproject.nflpickem.groups;
 
 
+
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -14,6 +15,8 @@ import org.springframework.data.repository.CrudRepository;
 public interface PickemGroupRepository extends CrudRepository<PickemGroup, String>{
 
     PickemGroup findByName(String groupname);
+    
+    
     
     
 

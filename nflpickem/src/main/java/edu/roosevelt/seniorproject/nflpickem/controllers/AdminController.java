@@ -16,6 +16,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -84,12 +85,15 @@ public class AdminController {
             return new ResponseEntity(users.findAll(), HttpStatus.OK);
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        }
-        
-        
-        
-        
-        
+        }    
     }
+    @GetMapping("/nflpickem/users/standingpicks")
+    public ResponseEntity<List<PickemGroupUser>> getAllGroupUser(HttpSession session){
+        if(this.isAdmin(session)){
+           return new ResponseEntity(groupusers.findAllUserGroupSorted(), HttpStatus.OK);  
+        }
+        return new ResponseEntity(null,HttpStatus.UNAUTHORIZED);
+           
+    }   
     
 }

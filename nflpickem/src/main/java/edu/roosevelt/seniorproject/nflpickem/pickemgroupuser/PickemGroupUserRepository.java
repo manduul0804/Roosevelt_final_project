@@ -6,6 +6,7 @@ package edu.roosevelt.seniorproject.nflpickem.pickemgroupuser;
 
 
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -21,4 +22,8 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
     List<PickemGroupUser> findByGrpname(String group);
     
     List<PickemGroupUser> findByUsername(String username);
+    
+    //Return all users sorted by group name first and then by score in descending order
+    @Query(value="SELECT * FROM pickemgroupuser ORDER BY GRPNAME, SCORE DESC", nativeQuery = true)
+    List<PickemGroupUser> findAllUserGroupSorted();
 }
