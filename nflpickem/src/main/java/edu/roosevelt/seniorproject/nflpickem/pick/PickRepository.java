@@ -17,6 +17,8 @@ public interface PickRepository extends CrudRepository<Pick, Integer>{
     
     List<Pick> findByUsernameAndGrpnameAndWeek(String user, String group, int week);
     
+    List<Pick> findBySelectionAndWeek(String sel, int week);
+    
     int countByWeek(int week);
     
     
