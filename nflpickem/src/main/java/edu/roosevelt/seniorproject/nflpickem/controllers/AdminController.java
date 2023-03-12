@@ -88,17 +88,26 @@ public class AdminController {
         }
     }
         
-    @GetMapping("/nflpickem/highscores/")
-    public ResponseEntity<List<HighScore>> getHighScores4EachGroupType(HttpSession session) {
-
-        return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
+  //  @GetMapping("/nflpickem/highscores/")
+    //public ResponseEntity<List<HighScore>> getHighScores4EachGroupType(HttpSession session) {
         
+      //  return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
+        
+    //}
+        
+      @GetMapping("/nflpickem/{group}/highscores")
+    public ResponseEntity<List<HighScore>> getHighScoresForGroup(@PathVariable("group") String group, HttpSession session) {
+        if (isLoggedIn(session)) {
+            String username = (String)session.getAttribute("user");
+            if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
+                return new ResponseEntity(groups.getHighScoresForGroup(group), HttpStatus.OK);
+            } 
+        }
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        
+        
+        
+    
+    
+    }   
     }
-        
-      
-        
-        
-        
-    
-    
-}

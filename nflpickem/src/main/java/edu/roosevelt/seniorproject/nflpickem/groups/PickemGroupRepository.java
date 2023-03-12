@@ -24,6 +24,8 @@ public interface PickemGroupRepository extends CrudRepository<PickemGroup, Strin
             + "from pickemgroupuser INNER JOIN pickemgroup ON pickemgroupuser.GRPNAME = pickemgroup.NAME "
             + "group by pickemgroup.type, pickemgroupuser.USERNAME", nativeQuery = true)
     List<HighScore> getHighScoresForEachGroupType();
+
+    public Object getHighScoresForGroup(String group);
     
     public interface HighScore {
 
