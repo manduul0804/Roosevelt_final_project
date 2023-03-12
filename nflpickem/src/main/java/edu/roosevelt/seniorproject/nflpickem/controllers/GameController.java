@@ -63,8 +63,31 @@ public class GameController {
     
     @Autowired
     PickemGroupUserRepository groupusers;
+//<<<<<<< Updated upstream
     
-    @GetMapping("/nflpickem/games/{week}")
+  //  @GetMapping("/nflpickem/games/{week}")
+//=======
+
+//      //Just a general get all games 
+//    @GetMapping("/nflpickem/games/allgames2")
+//    public ResponseEntity<List<Game>> getAllGames2(HttpSession session) {
+//       //only use this for testing purposes 
+//        
+//            return new ResponseEntity(users.findAll(), HttpStatus.OK);
+//       
+//        
+//    }
+    //Just a general get all games 
+    @GetMapping("/nflpickem/games/allgames")
+    public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
+        //is user logged in?
+            return new ResponseEntity(games.findAll(), HttpStatus.OK);
+
+    }
+
+    //Get games by a specific week. You need to be logged in for this to work.
+   // @GetMapping("/nflpickem/games/byweek/{week}")
+//>>>>>>> Stashed changes
     public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
         if (isLoggedIn(session)) {
             return new ResponseEntity(games.findByWeek(week),HttpStatus.OK);
