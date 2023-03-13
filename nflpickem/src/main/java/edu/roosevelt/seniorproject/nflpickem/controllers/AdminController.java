@@ -95,19 +95,31 @@ public class AdminController {
         
     //}
         
-      @GetMapping("/nflpickem/{group}/highscores")
-    public ResponseEntity<List<HighScore>> getHighScoresForGroup(@PathVariable("group") String group, HttpSession session) {
-        if (isLoggedIn(session)) {
-            String username = (String)session.getAttribute("user");
-            if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
-                return new ResponseEntity(groups.getHighScoresForGroup(group), HttpStatus.OK);
-            } 
-        }
-        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+   //   @GetMapping("/nflpickem/{group}/highscores")
+    //public ResponseEntity<List<HighScore>> getHighScoresForGroup(@PathVariable("group") String group, HttpSession session) {
+      //  if (isLoggedIn(session)) {
+        //    String username = (String)session.getAttribute("user");
+          //  if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
+            //    return new ResponseEntity(groups.getHighScoresForGroup(group), HttpStatus.OK);
+     //       } 
+       // }
+       // return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         
-        
+         // Jason's problem code
+
+  //   @GetMapping("/nflpickem/groups/highscores") // Removed path variable as we want to get ALL the highscores for each type of group rather than a specific group
+
+    //public ResponseEntity<List<PickemGroupUser>> getHighScoresForGroup(HttpSession session) {
+
+      //  if (isLoggedIn(session)) {
+        //        return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK); //Had to use the correct method from the PickemGroupRepository
+        //}
+
+       // return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+    //} // Was missing this closing bracket from email code
         
     
     
     }   
-    }
+    
