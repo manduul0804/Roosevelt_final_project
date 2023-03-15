@@ -20,7 +20,7 @@ public interface PickemGroupRepository extends CrudRepository<PickemGroup, Strin
     @Query(value = "select distinct type from pickemgroup", nativeQuery = true)
     List<String> findGroupTypes();
     
-    @Query(value = "select pickemgroup.type, pickemgroupuser.USERNAME, max(pickemgroupuser.SCORE) AS Score "
+    @Query(value = "select pickemgroup.type, pickemgroupuser.username, max(pickemgroupuser.SCORE) AS Score "
             + "from pickemgroupuser INNER JOIN pickemgroup ON pickemgroupuser.GRPNAME = pickemgroup.NAME "
             + "group by pickemgroup.type, pickemgroupuser.USERNAME", nativeQuery = true)
     List<HighScore> getHighScoresForEachGroupType();

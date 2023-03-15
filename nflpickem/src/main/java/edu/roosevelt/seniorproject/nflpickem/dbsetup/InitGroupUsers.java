@@ -42,19 +42,36 @@ public class InitGroupUsers {
             sql = sql + " DONE BOOLEAN,";
             */
             
+           
+            
             String sql = "INSERT INTO PICKEMGROUPUSER VALUES (";
             sql = sql + 9999 + ",'";
             sql = sql + usn[0] + "','";
             sql = sql + grps[0] + "','";
             sql = sql + "invited" + "',";
-            sql = sql + 0 + ",";
+            sql = sql + 100 + ",";
             sql = sql + false + ")";
-           
-            System.out.println(sql);
-
+            
+             String sq2 = "INSERT INTO PICKEMGROUPUSER VALUES (";
+            sq2 = sq2 + 9998 + ",'";
+            sq2 = sq2 + usn[1] + "','";
+            sq2 = sq2 + grps[1] + "','";
+            sq2 = sq2 + "invited" + "',";
+            sq2 = sq2 + 95 + ",";
+            sq2 = sq2 + false + ")";
+            
+            String sq3 = "INSERT INTO PICKEMGROUPUSER VALUES (";
+            sq3 = sq3 + 9997 + ",'";
+            sq3 = sq3 + usn[2] + "','";
+            sq3 = sq3 + grps[2] + "','";
+            sq3 = sq3 + "invited" + "',";
+            sq3 = sq3 + 70 + ",";
+            sq3 = sq3 + false + ")";
+            
             try {
                 conn.createStatement().execute(sql);
-
+                conn.createStatement().execute(sq2);
+                conn.createStatement().execute(sq3); 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -62,7 +79,10 @@ public class InitGroupUsers {
             
         } catch (Exception e) {
             System.out.println("oops:" + e);
+            
         }
+        
+        
     }
 
 }

@@ -104,20 +104,16 @@ public class AdminController {
      //       } 
        // }
        // return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        
-         // Jason's problem code
+      
 
-     @GetMapping("/nflpickem/groups/highscores") // Removed path variable as we want to get ALL the highscores for each type of group rather than a specific group
-
+     @GetMapping("/nflpickem/groups/highscores")
     public ResponseEntity<List<PickemGroupUser>> getHighScoresForGroup(HttpSession session) {
-
         if (isLoggedIn(session)) {
-            return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK); //Had to use the correct method from the PickemGroupRepository
+            return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
         }
-
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
-    } // Was missing this closing bracket from email code
+    } 
         
     
     
