@@ -221,13 +221,26 @@ public class UserController {
         }
     }
     
-    // as user, i want to see the deadline for next week is
-        @GetMapping("/nflpickem/users/deadline/{week}")
-    public ResponseEntity<List<Game>> getDeadline(@PathVariable("week")int week, /**@PathVariable("gameID")int gameID,*/ HttpSession session) {
+    // As user, I want to see the deadline for next week is by week
+        @GetMapping("/nflpickem/users/deadlineweek/{week}")
+    public ResponseEntity<List<Game>> getDeadlineByWeek(@PathVariable("week")int week, /**@PathVariable("gameID")int gameID,*/ HttpSession session) {
         //Checks if the user is logged in
         if (this.isLoggedIn(session)) {
             //Returns the deadline(Kickoff Time) for the week
-            return new ResponseEntity(games.findDeadline(week/*,gameID*/), HttpStatus.OK);
+            return new ResponseEntity(games.findDeadlineByWeek(week/*,gameID*/), HttpStatus.OK);
+        } else {
+            //Returns 401 error if not logged in
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    // As user, I want to see the deadline for next week is by game ID
+        @GetMapping("/nflpickem/users/deadlinegame/{gameID}")
+    public ResponseEntity<List<Game>> getDeadlineByGameID(@PathVariable("gameID")int gameID, HttpSession session) {
+        //Checks if the user is logged in
+        if (this.isLoggedIn(session)) {
+            //Returns the deadline(Kickoff Time) for the week
+            return new ResponseEntity(games.findDeadlineByGameID(gameID), HttpStatus.OK);
         } else {
             //Returns 401 error if not logged in
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);

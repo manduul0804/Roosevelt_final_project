@@ -22,7 +22,7 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
     
     
     @Query(value="SELECT gameid, team1, team2, kickoff, week FROM game WHERE week = ?1", nativeQuery = true)
-    List<Deadline> findDeadline(int week/*, int gameID*/);
+    List<Deadline> findDeadlineByWeek(int week/*, int gameID*/);
 
     public interface Deadline {
         public int getGameID();
@@ -32,5 +32,16 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
         public int getWeek();
     }
     
-    /* AND gameid = ?2,*/
+    
+    @Query(value="SELECT gameid, team1, team2, kickoff, gameID FROM game WHERE gameID = ?1", nativeQuery = true)
+    List<Deadline> findDeadlineByGameID(int gameID);
+
+    public interface Deadline {
+        public int getGameID();
+        public String getTeam1();
+        public String getTeam2();
+        public Timestamp getKickoff();
+        public int getWeek();
+    }
+    
 }
