@@ -5,6 +5,7 @@
 package edu.roosevelt.seniorproject.nflpickem.pick;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -21,8 +22,9 @@ public interface PickRepository extends CrudRepository<Pick, String> {
     
     
     //Karen Code for picks/username
-    List<Pick> findByUsername (String username);
-//=======
+
+    @Query(value = "SELECT * FROM PICKS WHERE USERNAME = ?1", nativeQuery = true)
+    List<Pick> findSpecialUserByUsername (String username);
   
     
     List<Pick> findBySelectionAndWeek(String sel, int week);

@@ -95,44 +95,52 @@ public class PickController {
        
      */
 
+//////    @GetMapping("/nflpickem/picks/{username}")
+//////    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
+//////       
+//////        if (isLoggedIn(session)) {
+//////            User you = (User)session.getAttribute("user");
+//////            if ((you.getUsername().equals (username))) {
+//////                if (picks.existsById(username)) {
+//////                   //They Exist! Lets get them
+//////                   Iterable<Pick> info = picks.findSpecialUserByUsername(username);
+//////                   //give me them
+////////                
+//////                    return new ResponseEntity(info, HttpStatus.OK);
+//////                    }
+//////               
+//////               } 
+//////            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+//////                
+//////            } else {
+//////           return new ResponseEntity(null, HttpStatus.UNAUTHORIZED); 
+//////            }
+//////           
+//////    }  
+    
+    //Testing without login below YESSS IT WORKS !!! 
+    
+////    @GetMapping("/nflpickem/picks/{username}")
+////    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
+////       return new ResponseEntity(picks.findSpecialUserByUsername(username), HttpStatus.OK);
+////    }
+    
+    //Testing adding logged in 
+    
     @GetMapping("/nflpickem/picks/{username}")
-    public ResponseEntity<Pick> getByUsername (@PathVariable("username") String username, HttpSession session) {
+    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
+       if (this.isLoggedIn(session)){
        
-        if (this.isLoggedIn(session)) {
-            User you = (User)session.getAttribute("user");
-            if ((you.getUsername().equals (username))) {
-                if (picks.existsById(username)) {
-                   //They Exist! Lets get them
-                   Iterable<Pick> info = picks.findAll();
-                   //give me them
-//                
-                    return new ResponseEntity(info, HttpStatus.OK);
-                    }
-               } 
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-                
-            } else {
-           return new ResponseEntity(null, HttpStatus.UNAUTHORIZED); 
-            }
            
-    }  
-    
-    
-    //checking if the endpoint works
-    //Doesn't work right.. need to look this up
-    
-//    @GetMapping("/nflpickem/picks/{username}/{grpname}/{week}")
-//    public ResponseEntity<Pick> getByUsernameAndGrpnameAndWeek (@PathVariable("user") String username,(@PathVariable ("grpname") String group, (@PathVariable ("week") Integer week, HttpSession session) {
-//      
-//       //They Exist! Lets get them
-//         Iterable<Pick> info = picks.findByUsernameAndGrpnameAndWeek(username, group, 0);
-//        //give me them
-//                    
-//                          
-//    }  
-//    
-    
-    
+        //it's you , lets get your info    
+        return new ResponseEntity(picks.findSpecialUserByUsername(username), HttpStatus.OK);
+      
+     } else {
+          return new ResponseEntity(null, HttpStatus.UNAUTHORIZED); 
+    }
+       //return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+    }
+
     //base url for all requests should be:
     // -> /nflpickem/picks
 }
