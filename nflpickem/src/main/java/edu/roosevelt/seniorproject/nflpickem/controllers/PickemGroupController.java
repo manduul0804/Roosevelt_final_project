@@ -10,6 +10,7 @@ import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepo
 import org.springframework.web.bind.annotation.GetMapping;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroup;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
+import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 //<<<<<<< HEAD
@@ -107,14 +108,7 @@ public class PickemGroupController {
     //base url for all requests should be:
     // -> /nflpickem/groups
     // checks to see if user is logged in
-    private boolean isLoggedIn(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    
     private String getUserName(HttpSession session) {
         if (session.getAttribute("user") != null) {
             return (String) session.getAttribute("user");
@@ -125,17 +119,7 @@ public class PickemGroupController {
 
     //checking if user is admin
     // checks to see if user is an Admin
-    private boolean isAdmin(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            //user is logged in, will get data
-            if (session.getAttribute("admin") != null) {
-                return true;
-            }
-
-        }
-        return false;
-    }
-    
+   
     //NATHAN HUERTA - MR
     @GetMapping(value = "/nflpickem/groups/{user}/join/{group}")
     public ResponseEntity<PickemGroup> joinGroupForUser(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {

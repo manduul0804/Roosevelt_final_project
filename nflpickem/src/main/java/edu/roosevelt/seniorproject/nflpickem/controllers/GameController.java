@@ -110,20 +110,7 @@ public class GameController {
 
     }
 
-    //Get games by a specific week. You need to be logged in for this to work.
-   // @GetMapping("/nflpickem/games/byweek/{week}")
-//>>>>>>> Stashed changes
-    public ResponseEntity<List<Game>> getGamesByWeek(@PathVariable("week") int week, HttpSession session) {
-        if (isLoggedIn(session)) {
-            return new ResponseEntity(games.findByWeek(week),HttpStatus.OK);
-//=======
-        if (this.isLoggedIn(session)) {
-            return new ResponseEntity(games.findAll(), HttpStatus.OK);
-//>>>>>>> main
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        }}
-    }
+ 
 
     //Get games by a specific week. You need to be logged in for this to work.
     @GetMapping("/nflpickem/games/byweek/{week}")
