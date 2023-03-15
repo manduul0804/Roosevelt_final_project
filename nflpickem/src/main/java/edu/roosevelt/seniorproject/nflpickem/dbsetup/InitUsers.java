@@ -21,7 +21,7 @@ public class InitUsers {
         try {
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "user", "user");
+                    "root", "root");
 
             System.out.println("Create USER/GAME (bases)");
             

@@ -4,6 +4,8 @@
  */
 package edu.roosevelt.seniorproject.nflpickem.controllers;
 
+import edu.roosevelt.seniorproject.nflpickem.games.Game;
+import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +40,9 @@ public class UserController {
 
     @Autowired
     UserRepository users;
+    
+    @Autowired
+    GameRepository games;
 
 
     @GetMapping("/home")
@@ -217,6 +222,16 @@ public class UserController {
     }
     
     // as user, i want to see the deadline for next week is
-    
+        @GetMapping("/nflpickem/users/deadline/{week}")
+    public ResponseEntity<List<Game>> getDeadline(@PathVariable("week")int week, /**@PathVariable("gameID")int gameID,*/ HttpSession session) {
+        //Checks if the user is logged in
+        if (this.isLoggedIn(session)) {
+            //Returns the deadline(Kickoff Time) for the week
+            return new ResponseEntity(games.findDeadline(week/*,gameID*/), HttpStatus.OK);
+        } else {
+            //Returns 401 error if not logged in
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
 

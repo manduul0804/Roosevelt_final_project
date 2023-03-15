@@ -7,6 +7,7 @@ package edu.roosevelt.seniorproject.nflpickem.games;
 
 import java.sql.Timestamp;
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -19,7 +20,17 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
     
     List<Game> findByKickoffAfterOrderByKickoffDesc(Timestamp ts);
     
-  
     
+    @Query(value="SELECT gameid, team1, team2, kickoff, week FROM game WHERE week = ?1", nativeQuery = true)
+    List<Deadline> findDeadline(int week/*, int gameID*/);
+
+    public interface Deadline {
+        public int getGameID();
+        public String getTeam1();
+        public String getTeam2();
+        public Timestamp getKickoff();
+        public int getWeek();
+    }
     
+    /* AND gameid = ?2,*/
 }
