@@ -144,6 +144,7 @@ Teamshortname
             sql = sql + " USERNAME VARCHAR(50),";
             sql = sql + " GRPNAME VARCHAR(25),";
             sql = sql + " GAMEID INTEGER,";
+            sql = sql + " WEEK INTEGER,";
             sql = sql + " SELECTION VARCHAR(30),";
             //now we need to enforce referential integrity
             sql = sql + " FOREIGN KEY (USERNAME) REFERENCES USER(USERNAME),";

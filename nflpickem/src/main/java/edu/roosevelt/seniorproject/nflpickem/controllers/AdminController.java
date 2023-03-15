@@ -7,8 +7,10 @@ package edu.roosevelt.seniorproject.nflpickem.controllers;
 import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
+import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
+import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
@@ -33,17 +35,7 @@ public class AdminController {
     
     @Autowired
     UserRepository users;
-    
-    @Autowired
-    GameRepository games;
-    
-    @Autowired
-    PickemGroupRepository groups;
-    
-    @Autowired
-    PickemGroupUserRepository groupusers;
-    
-     //simplifying code bit by bit
+        //simplifying code bit by bit
     private boolean isLoggedIn(HttpSession session) {
          if (session.getAttribute("user") != null) {
              return true;
@@ -63,6 +55,31 @@ public class AdminController {
         return false;
     }
     
+    @Autowired
+    GameRepository games;
+    
+    @Autowired
+    PickemGroupRepository groups;
+    
+    @Autowired
+    PickemGroupUserRepository groupusers;
+    
+    @Autowired
+    PickRepository picks;
+    
+    //OMAR NAVARRO -MR
+    @GetMapping("/nflpickem/admin/numpicks")
+    public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
+        if (this.isAdmin(session)) {
+
+            return new ResponseEntity(picks.count(), HttpStatus.UNAUTHORIZED);
+
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    
     
     @GetMapping("/nflpickem/admin/{group}")
     public ResponseEntity<List<Game>> getGroupLeaderboard(@PathVariable("group") String group, HttpSession session) {
@@ -75,4 +92,19 @@ public class AdminController {
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
     }
+     @GetMapping("/nflpickem/users/allgroups")
+    public ResponseEntity<List<User>> getAllgroups(HttpSession session) {
+        
+        if (this.isAdmin(session)) {
+            return new ResponseEntity(users.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+        
+        
+        
+        
+        
+    }
+    
 }
