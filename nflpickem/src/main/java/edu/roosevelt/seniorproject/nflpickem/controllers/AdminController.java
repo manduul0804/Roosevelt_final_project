@@ -8,6 +8,7 @@ import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
 import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
+import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository.HighScore;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
 import edu.roosevelt.seniorproject.nflpickem.user.User;
@@ -114,3 +115,18 @@ public class AdminController {
     }
 
 }
+    }
+        
+     @GetMapping("/nflpickem/groups/highscores")
+    public ResponseEntity<List<PickemGroupUser>> getHighScoresForGroup(HttpSession session) {
+        if (isLoggedIn(session)) {
+            return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
+        }
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+    } 
+        
+    
+    
+    }   
+    
