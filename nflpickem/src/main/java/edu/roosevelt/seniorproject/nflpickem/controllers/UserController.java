@@ -116,7 +116,9 @@ public class UserController {
                     Optional<User> opt = users.findById(username);
                     if (opt.isPresent()) {
                         User user = opt.get();
-
+                        user.setEmail("mruth@roosevelt.edu");
+                        users.save(user);
+                        
                         return new ResponseEntity(user, HttpStatus.OK);
 
                     }

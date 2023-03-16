@@ -43,7 +43,13 @@ public class InitPicks {
                     sql = sql + "'" + users[i] + "',";
                     sql = sql + "'" + grps[i] + "',";
                     sql = sql + "" + ++gameID + ",";
-                    sql = sql + "'NO')";
+                    sql = sql + "" + 1 + ",";
+                    if (y == 0) {
+                        sql = sql + "'NO')";
+                    } else {
+                        sql = sql + "'ATL')";
+                    }
+                    
                     
                     
                     System.out.println(sql); 

@@ -7,6 +7,8 @@ package edu.roosevelt.seniorproject.nflpickem.controllers;
 import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
+import edu.roosevelt.seniorproject.nflpickem.pick.Pick;
+import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
 import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,11 +52,12 @@ public class GameController {
 
     //simplifying code bit by bit
     private boolean isLoggedIn(HttpSession session) {
+        
         if (session.getAttribute("user") != null) {
-            return true;
-        } else {
-            return false;
-        }
+             return true;
+         } else {
+             return false;
+         }
     }
 
     private boolean isAdmin(HttpSession session) {
@@ -75,6 +79,15 @@ public class GameController {
 
     @Autowired
     PickemGroupUserRepository groupusers;
+//<<<<<<< Updated upstream
+    
+//<<<<<<< HEAD
+  //  @GetMapping("/nflpickem/games/{week}")
+//=======
+//=======
+     @Autowired
+     PickRepository picks;
+//>>>>>>> main
 
 //      //Just a general get all games 
 //    @GetMapping("/nflpickem/games/allgames2")
@@ -89,12 +102,12 @@ public class GameController {
     @GetMapping("/nflpickem/games/allgames")
     public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
         //is user logged in?
-        if (this.isLoggedIn(session)) {
+//<<<<<<< HEAD
             return new ResponseEntity(games.findAll(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        }
+
     }
+
+ 
 
     //Get games by a specific week. You need to be logged in for this to work.
     @GetMapping("/nflpickem/games/byweek/{week}")
@@ -126,6 +139,8 @@ public class GameController {
         }
 
     }
+    
+   
 
     //update games score for team 1
     @PutMapping(value = "/nflpickem/games/update", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -161,6 +176,83 @@ public class GameController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    @Async
+    public void scoreGames(Game game) {
+        logger.info("Execute method asynchronously. "
+                + game);
+        //4 jobs to do...
+        //straight up, three possible outcomes
+        //no winner
+        String suwinner = "NOONE";
+        //selection is correct
+        if (game.getTeam1score() > game.getTeam2score()) {
+            //sn matches the selection from pick
+            suwinner = game.getTeam1sn();
+        }
+        //selection is correct
+        if (game.getTeam1score() < game.getTeam2score()) {
+            //sn matches the selection from pick
+            suwinner = game.getTeam2sn();
+        }
+        //now do the work
+        logger.info("Straight UP Winner: " + suwinner);
+        //update query for updating scores based on winner
+        groupusers.updateScoreForSUOrATSSelections(suwinner, game.getGameid(), "SU");
+        
+        //SELECT groupusers.username, groupusers.score from picks, groupusers where groupusers.username = picks.username AND 
+        // picks.selection = 'winner' AND groupusers.grpname = picks.grpname
+         /*
+    String sql = "CREATE TABLE PICKEMGROUPUSER (";
+            sql = sql + " GUID INTEGER PRIMARY KEY,";
+            sql = sql + " USERNAME VARCHAR(50),";
+            
+            sql = sql + " GRPNAME VARCHAR(25),";
+            sql = sql + " STATUS VARCHAR(50),";
+            sql = sql + " SCORE INTEGER,";
+            //necessary for survivor league!
+            sql = sql + " DONE BOOLEAN,";
+        
+        
+        String username;
+    String grpname;
+    int gameid;
+    String selection;
+    int week;
+        
+        
+        
+    */
+        
+        //ATS winner selection gets point iff outcome = spread + score
+        //again three options
+        String atswinner = "NOONE";
+        //did selection win by at least the spread?
+        //selection is correct
+        if ((game.getTeam1score()+game.getSpread()) > game.getTeam2score()) {
+            //sn matches the selection from pick
+            atswinner = game.getTeam1sn();
+        }
+        //selection is correct
+        if ((game.getTeam1score()+game.getSpread()) < game.getTeam2score()) {
+            //sn matches the selection from pick
+            atswinner = game.getTeam2sn();
+        }
+        
+        //now do the work
+        logger.info("ATS Winner: " + atswinner);
+        //update ATS winners
+        groupusers.updateScoreForSUOrATSSelections(atswinner, game.getGameid(), "ATS");
+        //survivor/ML both use SU winner
+        //I am killing moneyline...
+        //survivor requires both winners/losers methods
+        groupusers.updateScoreForSURVSelectionsWin(suwinner, game.getGameid());
+        //losers now
+        groupusers.updateScoreForSURVSelectionsLoss(suwinner, game.getGameid());
+        
+        logger.info("Finished scoring for Game: " + game.getGameid());
+        
+    }
 
     //update games score for team 1
     @PutMapping(value = "/nflpickem/games/updatescore", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -175,6 +267,7 @@ public class GameController {
                 real.setTeam2score(g.getTeam2score());
                 //save the real entry
                 games.save(real);
+                scoreGames(real);
                 return new ResponseEntity(real, HttpStatus.OK);
 
             } else {

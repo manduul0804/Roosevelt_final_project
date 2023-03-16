@@ -92,6 +92,15 @@ public class Pick implements java.io.Serializable{
     String grpname;
     int gameid;
     String selection;
+    int week;
+
+    public int getWeek() {
+        return week;
+    }
+
+    public void setWeek(int week) {
+        this.week = week;
+    }
 
     
     
