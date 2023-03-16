@@ -292,5 +292,5 @@ public class PickemGroupController {
         }
     }
 
-    // END OF ETHAN'S CODE
-}
+    // END OF ETHAN'S CODE       
+        }

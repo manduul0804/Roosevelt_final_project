@@ -45,10 +45,10 @@ public class InitGroups {
                 
 
                 System.out.println(sql);
-
+       
                 try {
                     conn.createStatement().execute(sql);
-
+  
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
