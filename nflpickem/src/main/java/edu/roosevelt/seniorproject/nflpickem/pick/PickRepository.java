@@ -27,6 +27,7 @@ public interface PickRepository extends CrudRepository<Pick, String> {
     List<Pick> findSpecialUserByUsername (String username);
   
     
+    
     List<Pick> findBySelectionAndWeek(String sel, int week);
     
     int countByWeek(int week);
@@ -34,5 +35,7 @@ public interface PickRepository extends CrudRepository<Pick, String> {
     
     
 //>>>>>>> main
+
+    public Iterable<Pick> findByUsername(String username);
     
 }

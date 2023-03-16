@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  *
  * @author mruth
@@ -95,52 +96,42 @@ public class PickController {
        
      */
 
-//////    @GetMapping("/nflpickem/picks/{username}")
-//////    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
-//////       
-//////        if (isLoggedIn(session)) {
-//////            User you = (User)session.getAttribute("user");
-//////            if ((you.getUsername().equals (username))) {
-//////                if (picks.existsById(username)) {
-//////                   //They Exist! Lets get them
-//////                   Iterable<Pick> info = picks.findSpecialUserByUsername(username);
-//////                   //give me them
-////////                
-//////                    return new ResponseEntity(info, HttpStatus.OK);
-//////                    }
-//////               
-//////               } 
-//////            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-//////                
-//////            } else {
-//////           return new ResponseEntity(null, HttpStatus.UNAUTHORIZED); 
-//////            }
-//////           
-//////    }  
+
     
     //Testing without login below YESSS IT WORKS !!! 
-    
-////    @GetMapping("/nflpickem/picks/{username}")
-////    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
-////       return new ResponseEntity(picks.findSpecialUserByUsername(username), HttpStatus.OK);
-////    }
-    
-    //Testing adding logged in 
-    
-    @GetMapping("/nflpickem/picks/{username}")
-    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
-       if (this.isLoggedIn(session)){
-       
-           
-        //it's you , lets get your info    
-        return new ResponseEntity(picks.findSpecialUserByUsername(username), HttpStatus.OK);
-      
-     } else {
-          return new ResponseEntity(null, HttpStatus.UNAUTHORIZED); 
-    }
-       //return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-    }
+//    
+//    @GetMapping("/nflpickem/picks/{username}")
+//    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
+//       return new ResponseEntity(picks.findSpecialUserByUsername(username), HttpStatus.OK);
+//    }
+//}
 
-    //base url for all requests should be:
-    // -> /nflpickem/picks
+    @GetMapping("/nflpickem/picks/{username}")
+    public ResponseEntity<Pick> getByUsername(@PathVariable("username") String username, HttpSession session) {
+        //Must be logged in
+        if (isLoggedIn(session)) {
+
+            //They Exist! Lets get them
+            Iterable<Pick> info = picks.findSpecialUserByUsername(username);
+            //give me the info
+            return new ResponseEntity(info, HttpStatus.OK);
+        }
+
+        return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+    }
+    //return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 }
+
+
+        
+
+
+//End of Karen's Code
+
+
+  
+////    //base url for all requests should be:
+////    // -> /nflpickem/picks
+   
+
+    
