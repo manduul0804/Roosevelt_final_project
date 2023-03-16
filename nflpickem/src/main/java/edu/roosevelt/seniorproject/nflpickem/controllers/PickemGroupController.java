@@ -1,5 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+
+/* Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package edu.roosevelt.seniorproject.nflpickem.controllers;
@@ -10,16 +10,25 @@ import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepo
 import org.springframework.web.bind.annotation.GetMapping;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroup;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
+import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
+//<<<<<<< HEAD
+import java.util.List;
+
+//=======
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+//>>>>>>> main
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+//<<<<<<< HEAD
+//=======
 import org.springframework.http.MediaType;
+//>>>>>>> main
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,17 +60,55 @@ public class PickemGroupController {
     @Autowired
     PickemGroupUserRepository groupusers;
 
+//creating a group
+@PostMapping("/nflpickem/groups/create")
+  public ResponseEntity<String> createGroup(HttpSession session, String groupname) {
+    if (isLoggedIn(session)) {
+      if (groups.findByName(groupname) == null) {
+        //group doesn't exist, create it
+        groups.save(new PickemGroup());
+        //add user to group
+        User user = users.findByUsername((String)session.getAttribute("user"));
+        groupusers.save(new PickemGroupUser());
+        return ResponseEntity.ok("Group created");
+      } else {
+        return ResponseEntity.badRequest().body("Group already exists");
+      }
+    } else {
+      return ResponseEntity.badRequest().body("User not logged in");
+    }
+  }
+    
+    //checking if user is logged in
+    private boolean isLoggedIn(HttpSession session) {
+      if (session.getAttribute("user") != null) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    
+    //checking if user is admin
+    private boolean isAdmin(HttpSession session) {
+      if (session.getAttribute("user") != null) {
+          //user is logged in, will get data
+          if (session.getAttribute("admin") != null) {
+              return true;
+          }
+          
+      } 
+      return false;
+  }
+    
+    
+    
+    
+    
+
     //base url for all requests should be:
     // -> /nflpickem/groups
     // checks to see if user is logged in
-    private boolean isLoggedIn(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    
     private String getUserName(HttpSession session) {
         if (session.getAttribute("user") != null) {
             return (String) session.getAttribute("user");
@@ -72,17 +119,7 @@ public class PickemGroupController {
 
     //checking if user is admin
     // checks to see if user is an Admin
-    private boolean isAdmin(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            //user is logged in, will get data
-            if (session.getAttribute("admin") != null) {
-                return true;
-            }
-
-        }
-        return false;
-    }
-    
+   
     //NATHAN HUERTA - MR
     @GetMapping(value = "/nflpickem/groups/{user}/join/{group}")
     public ResponseEntity<PickemGroup> joinGroupForUser(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {
