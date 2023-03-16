@@ -31,42 +31,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class AdminController {
+
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
-    
+
     @Autowired
     UserRepository users;
-        //simplifying code bit by bit
+    //simplifying code bit by bit
+
     private boolean isLoggedIn(HttpSession session) {
-         if (session.getAttribute("user") != null) {
-             return true;
-         } else {
-             return false;
-         }
+        if (session.getAttribute("user") != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
+
     private boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
             //user is logged in, will get data
             if (session.getAttribute("admin") != null) {
                 return true;
             }
-            
-        } 
+
+        }
         return false;
     }
-    
+
     @Autowired
     GameRepository games;
-    
+
     @Autowired
     PickemGroupRepository groups;
-    
+
     @Autowired
     PickemGroupUserRepository groupusers;
-    
+
     @Autowired
     PickRepository picks;
-    
+
     //OMAR NAVARRO -MR
     @GetMapping("/nflpickem/admin/numpicks")
     public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
@@ -79,32 +81,36 @@ public class AdminController {
         }
     }
 
-    
-    
     @GetMapping("/nflpickem/admin/{group}")
     public ResponseEntity<List<Game>> getGroupLeaderboard(@PathVariable("group") String group, HttpSession session) {
         if (isLoggedIn(session)) {
-            String username = (String)session.getAttribute("user");
+            String username = (String) session.getAttribute("user");
             if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
                 List<PickemGroupUser> standings = groupusers.findByGrpname(group);
                 return new ResponseEntity(standings, HttpStatus.OK);
-            } 
+            }
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
     }
-     @GetMapping("/nflpickem/users/allgroups")
+
+    @GetMapping("/nflpickem/users/allgroups")
     public ResponseEntity<List<User>> getAllgroups(HttpSession session) {
-        
+
         if (this.isAdmin(session)) {
             return new ResponseEntity(users.findAll(), HttpStatus.OK);
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-        
-        
-        
-        
-        
+
     }
-    
+
+    @GetMapping("/nflpickem/users/standingpicks")
+    public ResponseEntity<List<PickemGroupUser>> getAllGroupUser(HttpSession session) {
+        if (this.isAdmin(session)) {
+            return new ResponseEntity(groupusers.findAllUserGroupSorted(), HttpStatus.OK);
+        }
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+    }
+
 }
