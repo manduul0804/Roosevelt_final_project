@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,30 +80,43 @@ public class GameController {
 
     @Autowired
     PickemGroupUserRepository groupusers;
-//<<<<<<< Updated upstream
 
-//<<<<<<< HEAD
-    //  @GetMapping("/nflpickem/games/{week}")
-//=======
-//=======
     @Autowired
     PickRepository picks;
-//>>>>>>> main
+    
+    //Jesus Guzman
+    @PostMapping(value = "/nflpickem/games", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Game> createGame(@RequestBody Game g, HttpSession session) throws SQLException {
+        //need to be an admin
+        if (this.isAdmin(session)) {
 
-//      //Just a general get all games 
-//    @GetMapping("/nflpickem/games/allgames2")
-//    public ResponseEntity<List<Game>> getAllGames2(HttpSession session) {
-//       //only use this for testing purposes 
-//        
-//            return new ResponseEntity(users.findAll(), HttpStatus.OK);
-//       
-//        
-//    }
+            //does the game already exist?
+            if (games.existsById(g.getGameid())) {
+                return new ResponseEntity(g, HttpStatus.FOUND);
+
+            } else {
+                //not created, so add it
+                games.save(g);
+                return new ResponseEntity(g, HttpStatus.OK);
+
+            }
+
+            //if not admin,UNAUTHORIZED.    
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+
+
+       
+    }
+    
+    
+    
+    
+    
     //Just a general get all games 
     @GetMapping("/nflpickem/games/allgames")
     public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
-        //is user logged in?
-//<<<<<<< HEAD
         return new ResponseEntity(games.findAll(), HttpStatus.OK);
 
     }
