@@ -220,7 +220,7 @@ public class UserController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
+//Sergey's Code
     // As user, I want to see the deadline for next week is by week
         @GetMapping("/nflpickem/users/deadlineweek/{week}")
     public ResponseEntity<List<Game>> getDeadlineByWeek(@PathVariable("week")int week, /**@PathVariable("gameID")int gameID,*/ HttpSession session) {
@@ -234,8 +234,8 @@ public class UserController {
         }
     }
     
-    // As user, I want to see the deadline for next week is by game ID
-        /*@GetMapping("/nflpickem/users/deadlinegame/{gameID}")
+     //As user, I want to see the deadline for next week is by game ID
+        @GetMapping("/nflpickem/users/deadlinegame/{gameID}")
     public ResponseEntity<List<Game>> getDeadlineByGameID(@PathVariable("gameID")int gameID, HttpSession session) {
         //Checks if the user is logged in
         if (this.isLoggedIn(session)) {
@@ -245,6 +245,7 @@ public class UserController {
             //Returns 401 error if not logged in
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-    }*/
+    }
+    //End of Sergey's Code
 }
 
