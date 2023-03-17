@@ -17,27 +17,27 @@ public class InitPicks {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-                try {
+        try {
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
                     "user", "user");
 
             System.out.println("Create USER/GAME (bases)");
-            
+
             String[] users = {"red", "blue"};
-            String[] grps = {"bronze","gold","silver"};
+            String[] grps = {"bronze", "gold", "silver"};
 //                      String sql = "CREATE TABLE PICKS (";
 //            sql = sql + " PID INTEGER PRIMARY KEY,";
 //            sql = sql + " USERNAME VARCHAR(50),";
 //            sql = sql + " GRPNAME VARCHAR(25),";
 //            sql = sql + " GAMEID INTEGER,";
 //            sql = sql + " SELECTION VARCHAR(30),";
-            
+
             int gameID = 10000;
             int pid = 10000;
 
-            for (int i=0; i<users.length; i++) {
-                for (int y=0; y<3; y++) {
+            for (int i = 0; i < users.length; i++) {
+                for (int y = 0; y < 3; y++) {
                     String sql = "INSERT INTO PICKS VALUES (";
                     sql = sql + ++pid + ",";
                     sql = sql + "'" + users[i] + "',";
@@ -49,11 +49,9 @@ public class InitPicks {
                     } else {
                         sql = sql + "'ATL')";
                     }
-                    
-                    
-                    
-                    System.out.println(sql); 
-                    
+
+                    System.out.println(sql);
+
                     try {
                         conn.createStatement().execute(sql);
 
@@ -61,29 +59,15 @@ public class InitPicks {
                         System.out.println(e.getMessage());
                     }
 
-
                 }
-                
-                
-                
-               
-                
-                
-                
-                
+
             }
 
-                
-                
-                
-
-
-            
             System.out.println("Table USER created!");
-         } catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("oops:" + e);
         }
-        
+
     }
-    
+
 }

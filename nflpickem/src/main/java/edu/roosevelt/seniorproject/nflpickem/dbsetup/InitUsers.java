@@ -26,7 +26,7 @@ public class InitUsers {
                     "user", "user");
 
             System.out.println("Create USER/GAME (bases)");
-            
+
             String[] uns = {"admin", "red", "blue", "green", "yellow"};
 //            //USER goes first
 //            String sql = "CREATE TABLE USER (";
@@ -35,8 +35,8 @@ public class InitUsers {
 //            sql = sql + " ADMIN BOOLEAN,";
 //            sql = sql + " NAME VARCHAR(50),";
 //            sql = sql + " EMAIL VARCHAR(50))";
-            
-            for (int i=0; i<uns.length; i++) {
+
+            for (int i = 0; i < uns.length; i++) {
                 String sql = "INSERT INTO USER VALUES ('";
                 sql = sql + uns[i] + "',";
                 sql = sql + "'" + uns[i] + "',";
@@ -53,52 +53,45 @@ public class InitUsers {
                     name = "Ms. " + uns[i].substring(0, 1).toUpperCase() + uns[i].substring(1);
                 }
                 sql = sql + "'" + name + "',";
-                sql = sql + "'" + uns[i] +"@mail.roosevelt.edu" + "')";
-                
-               
-                System.out.println(sql); 
-                
+                sql = sql + "'" + uns[i] + "@mail.roosevelt.edu" + "')";
+
+                System.out.println(sql);
+
                 try {
                     conn.createStatement().execute(sql);
-                    
+
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-                
+
             }
 
-                     
-      
             System.out.println("Table USER created!");
-         } catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("oops:" + e);
         }
-      
+
         // as admin, see how many users there are
-         try {
+        try {
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
                     "user", "user");
-            
+
             String sql = "SELECT count(USERNAME) FROM user WHERE admin = 0";
-            
+
             try {
                 Statement cursor = conn.createStatement();
                 ResultSet rSet = cursor.executeQuery(sql);
                 System.out.println("Number of users: " + rSet.getString(1));
-            }
-            catch (Exception error) {
+            } catch (Exception error) {
                 System.out.println(error.getMessage());
-            }
-            finally {
+            } finally {
                 conn.close();
             }
-            
 
-        }    
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println(error.getMessage());
         }
     }
-    
+
 }

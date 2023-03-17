@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 /**
  *
  * @author mruth
@@ -36,27 +35,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class PickController {
+
     private static final Logger logger = LoggerFactory.getLogger(PickController.class);
-    
+
     @Autowired
     UserRepository users;
-    
+
     @Autowired
     GameRepository games;
-    
+
     @Autowired
     PickemGroupRepository groups;
-    
+
     @Autowired
     PickemGroupUserRepository groupusers;
-    
-    
- //Karen Code Below
-    
+
+    //Karen Code Below
     @Autowired
     PickRepository picks;
-    
- //checking if session is good
+
+    //checking if session is good
     @GetMapping("/nflpickem/picks")
     public String testGroups(HttpSession session) {
         if (session != null && session.getAttribute("user") != null) {
@@ -95,9 +93,6 @@ public class PickController {
     As a user, I want to be able to see my picks for each group that I belong to for a given week
        
      */
-
-
-    
     //Testing without login below YESSS IT WORKS !!! 
 //    
 //    @GetMapping("/nflpickem/picks/{username}")
@@ -105,7 +100,6 @@ public class PickController {
 //       return new ResponseEntity(picks.findSpecialUserByUsername(username), HttpStatus.OK);
 //    }
 //}
-
     @GetMapping("/nflpickem/picks/{username}")
     public ResponseEntity<Pick> getByUsername(@PathVariable("username") String username, HttpSession session) {
         //Must be logged in
@@ -122,16 +116,7 @@ public class PickController {
     //return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 }
 
-
-        
-
-
 //End of Karen's Code
-
-
-  
 ////    //base url for all requests should be:
 ////    // -> /nflpickem/picks
-   
 
-    

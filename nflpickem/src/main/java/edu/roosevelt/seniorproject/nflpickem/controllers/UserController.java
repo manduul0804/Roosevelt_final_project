@@ -118,7 +118,7 @@ public class UserController {
                         User user = opt.get();
                         user.setEmail("mruth@roosevelt.edu");
                         users.save(user);
-                        
+
                         return new ResponseEntity(user, HttpStatus.OK);
 
                     }

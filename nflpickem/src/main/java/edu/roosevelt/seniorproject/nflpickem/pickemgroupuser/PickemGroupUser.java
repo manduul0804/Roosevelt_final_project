@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
  */
 @Entity
 public class PickemGroupUser {
+
     @Id
     int guid;
     String username;
@@ -20,7 +21,7 @@ public class PickemGroupUser {
     String status;
     int score;
     boolean done;
-    
+
     /*
     String sql = "CREATE TABLE PICKEMGROUPUSER (";
             sql = sql + " GUID INTEGER PRIMARY KEY,";
@@ -31,8 +32,7 @@ public class PickemGroupUser {
             sql = sql + " SCORE INTEGER,";
             //necessary for survivor league!
             sql = sql + " DONE BOOLEAN,";
-    */
-
+     */
     public int getGuid() {
         return guid;
     }

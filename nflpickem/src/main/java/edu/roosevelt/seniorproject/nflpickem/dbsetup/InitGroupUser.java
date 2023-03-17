@@ -26,9 +26,7 @@ public class InitGroupUser {
             System.out.println("Create GROUP (not base - depends on user)");
 
             String[] uns = {"admin", "red", "blue", "green", "yellow"};
-            String[] grps = {"bronze","gold","silver"};
-          
-
+            String[] grps = {"bronze", "gold", "silver"};
 
 // String sql = "CREATE TABLE PICKEMGROUPUSER (";
 //            sql = sql + " GUID INTEGER PRIMARY KEY,";
@@ -43,16 +41,14 @@ public class InitGroupUser {
 //            sql = sql + " FOREIGN KEY (USERNAME) REFERENCES USER(USERNAME),";
 //            sql = sql + " FOREIGN KEY (GRPNAME) REFERENCES PICKEMGROUP(NAME))";
 //        
-
             int guid = 10001;
             for (int i = 0; i < grps.length; i++) {
                 String sql = "INSERT INTO PICKEMGROUPUSER VALUES (";
                 sql = sql + guid++ + ",";
-                sql = sql + "'" + uns[i+1] + "','";         
+                sql = sql + "'" + uns[i + 1] + "','";
                 sql = sql + grps[i] + "',";
                 sql = sql + "'doesnt matter',";
                 sql = sql + "0,false)";
-                
 
                 System.out.println(sql);
 

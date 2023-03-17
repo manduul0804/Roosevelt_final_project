@@ -29,7 +29,6 @@ public class InitGroupUsers {
             String[] usn = {"admin", "red", "blue", "green", "yellow"};
             String[] grps = {"bronze", "gold", "silver"};
 
-            
             /*
             String sql = "CREATE TABLE PICKEMGROUPUSER (";
             sql = sql + " GUID INTEGER PRIMARY KEY,";
@@ -40,10 +39,7 @@ public class InitGroupUsers {
             sql = sql + " SCORE INTEGER,";
             //necessary for survivor league!
             sql = sql + " DONE BOOLEAN,";
-            */
-            
-           
-            
+             */
             String sql = "INSERT INTO PICKEMGROUPUSER VALUES (";
             sql = sql + 9999 + ",'";
             sql = sql + usn[0] + "','";
@@ -51,15 +47,15 @@ public class InitGroupUsers {
             sql = sql + "invited" + "',";
             sql = sql + 100 + ",";
             sql = sql + false + ")";
-            
-             String sq2 = "INSERT INTO PICKEMGROUPUSER VALUES (";
+
+            String sq2 = "INSERT INTO PICKEMGROUPUSER VALUES (";
             sq2 = sq2 + 9998 + ",'";
             sq2 = sq2 + usn[1] + "','";
             sq2 = sq2 + grps[1] + "','";
             sq2 = sq2 + "invited" + "',";
             sq2 = sq2 + 95 + ",";
             sq2 = sq2 + false + ")";
-            
+
             String sq3 = "INSERT INTO PICKEMGROUPUSER VALUES (";
             sq3 = sq3 + 9997 + ",'";
             sq3 = sq3 + usn[2] + "','";
@@ -67,22 +63,20 @@ public class InitGroupUsers {
             sq3 = sq3 + "invited" + "',";
             sq3 = sq3 + 70 + ",";
             sq3 = sq3 + false + ")";
-            
+
             try {
                 conn.createStatement().execute(sql);
                 conn.createStatement().execute(sq2);
-                conn.createStatement().execute(sq3); 
+                conn.createStatement().execute(sq3);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
 
-            
         } catch (Exception e) {
             System.out.println("oops:" + e);
-            
+
         }
-        
-        
+
     }
 
 }

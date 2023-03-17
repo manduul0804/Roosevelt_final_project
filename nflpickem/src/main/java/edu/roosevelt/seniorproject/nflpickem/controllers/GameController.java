@@ -52,12 +52,12 @@ public class GameController {
 
     //simplifying code bit by bit
     private boolean isLoggedIn(HttpSession session) {
-        
+
         if (session.getAttribute("user") != null) {
-             return true;
-         } else {
-             return false;
-         }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private boolean isAdmin(HttpSession session) {
@@ -80,13 +80,13 @@ public class GameController {
     @Autowired
     PickemGroupUserRepository groupusers;
 //<<<<<<< Updated upstream
-    
+
 //<<<<<<< HEAD
-  //  @GetMapping("/nflpickem/games/{week}")
+    //  @GetMapping("/nflpickem/games/{week}")
 //=======
 //=======
-     @Autowired
-     PickRepository picks;
+    @Autowired
+    PickRepository picks;
 //>>>>>>> main
 
 //      //Just a general get all games 
@@ -103,11 +103,9 @@ public class GameController {
     public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
         //is user logged in?
 //<<<<<<< HEAD
-            return new ResponseEntity(games.findAll(), HttpStatus.OK);
+        return new ResponseEntity(games.findAll(), HttpStatus.OK);
 
     }
-
- 
 
     //Get games by a specific week. You need to be logged in for this to work.
     @GetMapping("/nflpickem/games/byweek/{week}")
@@ -139,8 +137,6 @@ public class GameController {
         }
 
     }
-    
-   
 
     //update games score for team 1
     @PutMapping(value = "/nflpickem/games/update", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -176,7 +172,7 @@ public class GameController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
+
     @Async
     public void scoreGames(Game game) {
         logger.info("Execute method asynchronously. "
@@ -199,10 +195,10 @@ public class GameController {
         logger.info("Straight UP Winner: " + suwinner);
         //update query for updating scores based on winner
         groupusers.updateScoreForSUOrATSSelections(suwinner, game.getGameid(), "SU");
-        
+
         //SELECT groupusers.username, groupusers.score from picks, groupusers where groupusers.username = picks.username AND 
         // picks.selection = 'winner' AND groupusers.grpname = picks.grpname
-         /*
+        /*
     String sql = "CREATE TABLE PICKEMGROUPUSER (";
             sql = sql + " GUID INTEGER PRIMARY KEY,";
             sql = sql + " USERNAME VARCHAR(50),";
@@ -222,23 +218,22 @@ public class GameController {
         
         
         
-    */
-        
+         */
         //ATS winner selection gets point iff outcome = spread + score
         //again three options
         String atswinner = "NOONE";
         //did selection win by at least the spread?
         //selection is correct
-        if ((game.getTeam1score()+game.getSpread()) > game.getTeam2score()) {
+        if ((game.getTeam1score() + game.getSpread()) > game.getTeam2score()) {
             //sn matches the selection from pick
             atswinner = game.getTeam1sn();
         }
         //selection is correct
-        if ((game.getTeam1score()+game.getSpread()) < game.getTeam2score()) {
+        if ((game.getTeam1score() + game.getSpread()) < game.getTeam2score()) {
             //sn matches the selection from pick
             atswinner = game.getTeam2sn();
         }
-        
+
         //now do the work
         logger.info("ATS Winner: " + atswinner);
         //update ATS winners
@@ -249,9 +244,9 @@ public class GameController {
         groupusers.updateScoreForSURVSelectionsWin(suwinner, game.getGameid());
         //losers now
         groupusers.updateScoreForSURVSelectionsLoss(suwinner, game.getGameid());
-        
+
         logger.info("Finished scoring for Game: " + game.getGameid());
-        
+
     }
 
     //update games score for team 1

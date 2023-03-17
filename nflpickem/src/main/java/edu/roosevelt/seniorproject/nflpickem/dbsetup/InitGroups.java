@@ -26,29 +26,23 @@ public class InitGroups {
             System.out.println("Create GROUP (not base - depends on user)");
 
             String[] uns = {"admin", "red", "blue", "green", "yellow"};
-            String[] grps = {"bronze","gold","silver"};
-          
+            String[] grps = {"bronze", "gold", "silver"};
 
 //            String sql = "CREATE TABLE PICKEMGROUP (";
 //            sql = sql + "NAME VARCHAR(25) PRIMARY KEY,";
 //            sql = sql + " TYPE VARCHAR(3),";
 //            sql = sql + " ADMIN VARCHAR(50),";
 //            sql = sql + " FOREIGN KEY (ADMIN) REFERENCES USER(USERNAME))";
-            
-        
-
-
             for (int i = 0; i < grps.length; i++) {
                 String sql = "INSERT INTO PICKEMGROUP VALUES ('";
                 sql = sql + grps[i] + "','SU',";
-                sql = sql + "'" + uns[i+1] + "')";
-                
+                sql = sql + "'" + uns[i + 1] + "')";
 
                 System.out.println(sql);
-       
+
                 try {
                     conn.createStatement().execute(sql);
-  
+
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
