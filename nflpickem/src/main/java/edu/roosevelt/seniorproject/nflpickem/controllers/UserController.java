@@ -220,7 +220,7 @@ public class UserController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    //sergey's code
+    
     // As user, I want to see the deadline for next week is by week
         @GetMapping("/nflpickem/users/deadlineweek/{week}")
     public ResponseEntity<List<Game>> getDeadlineByWeek(@PathVariable("week")int week, /**@PathVariable("gameID")int gameID,*/ HttpSession session) {
@@ -246,6 +246,5 @@ public class UserController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }*/
-    //end of sergey's code
 }
 
