@@ -86,7 +86,15 @@ public class AdminController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
         
+        // Muhammad's code
+     @GetMapping("/nflpickem/users/allgroups")
+    public ResponseEntity<List<User>> getAllgroups(HttpSession session) {
         
+        if (this.isAdmin(session)) {
+            return new ResponseEntity(users.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
         
         
         
