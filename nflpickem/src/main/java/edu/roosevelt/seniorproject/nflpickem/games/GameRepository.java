@@ -20,7 +20,7 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
     
     List<Game> findByKickoffAfterOrderByKickoffDesc(Timestamp ts);
     
-    
+    //sergeys's Code
     @Query(value="SELECT gameid, team1, team2, kickoff, week FROM game WHERE week = ?1", nativeQuery = true)
     List<Deadline> findDeadlineByWeek(int week/*, int gameID*/);
 
@@ -33,7 +33,7 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
     }
     
     
-    /*@Query(value="SELECT gameid, team1, team2, kickoff, gameID FROM game WHERE gameID = ?1", nativeQuery = true)
+    /*@Query(value="SELECT team1, team2, kickoff, gameID FROM game WHERE gameID = ?1", nativeQuery = true)
     List<Deadline> findDeadlineByGameID(int gameID);
 
     public interface Deadline {
@@ -43,5 +43,5 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
         public Timestamp getKickoff();
         public int getWeek();
     }*/
-    
+    //end of sergey's code
 }
