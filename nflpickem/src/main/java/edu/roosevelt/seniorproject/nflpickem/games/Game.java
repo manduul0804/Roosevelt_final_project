@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.sql.Timestamp;
 
+
 /**
  *
  * @author mruth
@@ -77,6 +78,8 @@ public class Game {
         final Game other = (Game) obj;
         return this.gameid == other.gameid;
     }
+    
+  
 
     public int getGameid() {
         return gameid;

@@ -7,6 +7,7 @@ package edu.roosevelt.seniorproject.nflpickem.games;
 
 import java.sql.Timestamp;
 import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -15,11 +16,11 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface GameRepository extends CrudRepository<Game, Integer>{
 
+    
+
     List<Game> findByWeek(int week);
     
     List<Game> findByKickoffAfterOrderByKickoffDesc(Timestamp ts);
     
   
-    
-    
 }
