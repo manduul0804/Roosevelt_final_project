@@ -226,7 +226,7 @@ public class UserController {
     public ResponseEntity<List<Game>> getDeadlineByGameID(@PathVariable("gameID")int gameID, HttpSession session) {
         //Checks if the user is logged in
         if (this.isLoggedIn(session)) {
-            //Returns the deadline(Kickoff Time) for the week
+            //Returns the deadline(Kickoff Time) for the gameID
             return new ResponseEntity(games.findDeadlineByGameID(gameID), HttpStatus.OK);
         } else {
             //Returns 401 error if not logged in
