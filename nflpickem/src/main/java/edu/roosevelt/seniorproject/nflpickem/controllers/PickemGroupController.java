@@ -318,6 +318,24 @@ public class PickemGroupController {
 
 //base url for all requests should be:
 // -> /nflpickem/groups 
+    
+    
+    @GetMapping("/nflpickem/groups/byinvite")
+    public ResponseEntity<List<PickemGroupUser>> getGroupsByInvite(HttpSession session) {
+        String status = "invited";
+        String username = this.getUserName(session); //Gets the username of the current logged in user
+        if (this.isLoggedIn(session)) {
+            return new ResponseEntity(groupusers.findByUsernameAndStatus(username, status), HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+    
+    
+    
+    
     // delete a group
     @DeleteMapping("/nflpickem/groups/{groupname}")
     public ResponseEntity<String> deleteGroup(@PathVariable("groupname") String groupname, HttpSession session) {
