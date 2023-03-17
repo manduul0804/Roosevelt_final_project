@@ -18,7 +18,7 @@ public class ProjectSetup {
         try {
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "root", "root");
+                    "user", "user");
 
             System.out.println("Create USER/GAME (bases)");
             //USER goes first
@@ -72,7 +72,7 @@ group admin FK
         try {
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "root", "root");
+                    "user", "user");
             //GROUP goes next
             String sql = "CREATE TABLE PICKEMGROUP (";
             sql = sql + "NAME VARCHAR(25) PRIMARY KEY,";
@@ -93,7 +93,7 @@ group admin FK
             System.out.println("Create GROUPUSER (depends on USER/GROUP");
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "root", "root");
+                    "user", "user");
             //GROUPUSER goes next
             
             
@@ -127,7 +127,7 @@ group admin FK
             System.out.println("Create GROUPUSER (depends on USER/GROUP");
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "root", "root");
+                    "user", "user");
             //GROUPUSER goes next
             /*
             pickid

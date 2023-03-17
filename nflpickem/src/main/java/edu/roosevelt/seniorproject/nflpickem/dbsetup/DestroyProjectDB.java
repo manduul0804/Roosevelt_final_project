@@ -22,7 +22,7 @@ public class DestroyProjectDB {
         try {
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "root", "root");
+                    "user", "user");
             
             System.out.println("If PICKS Table Exists... drop it like it's hot");
             try {
