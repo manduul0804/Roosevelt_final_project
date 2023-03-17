@@ -89,7 +89,6 @@ public class GameController {
     public ResponseEntity<Game> createGame(@RequestBody Game g, HttpSession session) throws SQLException {
         //need to be an admin
         if (this.isAdmin(session)) {
-
             //does the game already exist?
             if (games.existsById(g.getGameid())) {
                 return new ResponseEntity(g, HttpStatus.FOUND);
@@ -98,16 +97,10 @@ public class GameController {
                 //not created, so add it
                 games.save(g);
                 return new ResponseEntity(g, HttpStatus.OK);
-
             }
-
-            //if not admin,UNAUTHORIZED.    
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-
-
-       
     }
     
     
