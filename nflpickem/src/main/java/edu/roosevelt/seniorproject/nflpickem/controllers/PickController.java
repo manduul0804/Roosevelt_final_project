@@ -87,36 +87,47 @@ public class PickController {
         }
         return false;
     }
-
-    //Code below for
-    /* 
-    As a user, I want to be able to see my picks for each group that I belong to for a given week
-       
-     */
-    //Testing without login below YESSS IT WORKS !!! 
-//    
-//    @GetMapping("/nflpickem/picks/{username}")
-//    public ResponseEntity<Pick> getBySpecialUserByUsername (@PathVariable("username") String username, HttpSession session) {
-//       return new ResponseEntity(picks.findSpecialUserByUsername(username), HttpStatus.OK);
-//    }
-//}
-    @GetMapping("/nflpickem/picks/{username}")
-    public ResponseEntity<Pick> getByUsername(@PathVariable("username") String username, HttpSession session) {
-        //Must be logged in
-        if (isLoggedIn(session)) {
-
-            //They Exist! Lets get them
-            Iterable<Pick> info = picks.findSpecialUserByUsername(username);
-            //give me the info
-            return new ResponseEntity(info, HttpStatus.OK);
-        }
-
-        return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+    
+    //checking if user is admin
+    private String getUsername(HttpSession session) {
+        
+        return (String)session.getAttribute("user");
+        
     }
-    //return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+ 
+    @GetMapping("/nflpickem/picks/{username}/group/{group}/week/{week}")
+    public ResponseEntity<List<Pick>> getByUsername(@PathVariable("username") String username,@PathVariable("group") String grp, @PathVariable("week") int week, HttpSession session) {
+    
+        if (this.isLoggedIn(session)) {
+            //get the username of the user logged in
+            String myusername = this.getUsername(session);
+            if (myusername.equals(username) || this.isAdmin(session)) {
+                //is the user in the group in question?
+                if (groupusers.existsByUsernameAndGrpname(username, grp)) {
+                    //if so, go get the picks
+                    return new ResponseEntity(picks.findByUsernameAndGrpnameAndWeek(username, grp, week), HttpStatus.UNAUTHORIZED);                    
+                } else {
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+                }
+                
+                
+            } else {
+                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+            }
+            
+            
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+        
+    }
+    
+    
+   
 }
 
-//End of Karen's Code
+
 ////    //base url for all requests should be:
 ////    // -> /nflpickem/picks
 
