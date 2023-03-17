@@ -72,7 +72,7 @@ public class AdminController {
     @Autowired
     PickRepository picks;
 
-    @GetMapping("/nflpickem/picks/byweek/{week}")
+    @GetMapping("/nflpickem/admin/numpicks/byweek/{week}")
     public ResponseEntity<List<Pick>> getPicksByweek(@PathVariable("week") int week, HttpSession session) {
         if (this.isAdmin(session)) {
             return new ResponseEntity(picks.countByWeek(week), HttpStatus.OK);
@@ -95,6 +95,18 @@ public class AdminController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    //Riley -MR
+    @GetMapping("/nflpickem/admin/numgroups")
+    public ResponseEntity<Long> getTotalNumberOfGroups(HttpSession session) {
+        if (this.isAdmin(session)) {
+
+            return new ResponseEntity(groups.count(), HttpStatus.UNAUTHORIZED);
+
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @GetMapping("/nflpickem/admin/{group}")
     public ResponseEntity<List<Game>> getGroupLeaderboard(@PathVariable("group") String group, HttpSession session) {
@@ -107,8 +119,10 @@ public class AdminController {
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
     }
+    
+    
 
-    @GetMapping("/nflpickem/users/allgroups")
+    @GetMapping("/nflpickem/admin/allgroups")
     public ResponseEntity<List<User>> getAllgroups(HttpSession session) {
 
         if (this.isAdmin(session)) {
