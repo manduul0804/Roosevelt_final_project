@@ -70,28 +70,8 @@ public class InitUsers {
         } catch (Exception e) {
             System.out.println("oops:" + e);
         }
-
-        // as admin, see how many users there are
-        try {
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/nflpickem",
-                    "user", "user");
-
-            String sql = "SELECT count(USERNAME) FROM user WHERE admin = 0";
-
-            try {
-                Statement cursor = conn.createStatement();
-                ResultSet rSet = cursor.executeQuery(sql);
-                System.out.println("Number of users: " + rSet.getString(1));
-            } catch (Exception error) {
-                System.out.println(error.getMessage());
-            } finally {
-                conn.close();
-            }
-
-        } catch (Exception error) {
-            System.out.println(error.getMessage());
-        }
+      
+       
     }
 
 }
