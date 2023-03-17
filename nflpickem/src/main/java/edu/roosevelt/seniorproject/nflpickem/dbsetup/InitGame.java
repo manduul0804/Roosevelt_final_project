@@ -30,7 +30,7 @@ public class InitGame {
         Scanner scanner = new Scanner(new File("week1matchups.txt"));
         Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "user", "user");
+                    "root", "root");
 
             System.out.println("Create USER/GAME (bases)");
             int counter = 10000;

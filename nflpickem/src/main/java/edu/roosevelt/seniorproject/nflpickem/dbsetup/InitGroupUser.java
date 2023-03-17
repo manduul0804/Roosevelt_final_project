@@ -21,7 +21,7 @@ public class InitGroupUser {
         try {
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
-                    "user", "user");
+                    "root", "root");
 
             System.out.println("Create GROUP (not base - depends on user)");
 
