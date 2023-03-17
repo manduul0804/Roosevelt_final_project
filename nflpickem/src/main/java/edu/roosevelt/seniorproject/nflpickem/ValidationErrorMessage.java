@@ -13,8 +13,9 @@ import java.util.List;
  * @author mruth
  */
 public class ValidationErrorMessage {
+
     private String errorDetail = "Input Field Validation Error";
-    
+
     private List<FieldErrorMessage> errors = new ArrayList();
 
     public String getErrorDetail() {
@@ -32,10 +33,9 @@ public class ValidationErrorMessage {
     public void setErrors(List<FieldErrorMessage> errors) {
         this.errors = errors;
     }
-    
+
     public void addFieldErrorMessage(FieldErrorMessage fem) {
         errors.add(fem);
     }
-   
-    
+
 }

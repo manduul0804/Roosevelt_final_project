@@ -61,54 +61,48 @@ public class PickemGroupController {
     PickemGroupUserRepository groupusers;
 
 //creating a group
-@PostMapping("/nflpickem/groups/create")
-  public ResponseEntity<String> createGroup(HttpSession session, String groupname) {
-    if (isLoggedIn(session)) {
-      if (groups.findByName(groupname) == null) {
-        //group doesn't exist, create it
-        groups.save(new PickemGroup());
-        //add user to group
-        User user = users.findByUsername((String)session.getAttribute("user"));
-        groupusers.save(new PickemGroupUser());
-        return ResponseEntity.ok("Group created");
-      } else {
-        return ResponseEntity.badRequest().body("Group already exists");
-      }
-    } else {
-      return ResponseEntity.badRequest().body("User not logged in");
+    @PostMapping("/nflpickem/groups/create")
+    public ResponseEntity<String> createGroup(HttpSession session, String groupname) {
+        if (isLoggedIn(session)) {
+            if (groups.findByName(groupname) == null) {
+                //group doesn't exist, create it
+                groups.save(new PickemGroup());
+                //add user to group
+                User user = users.findByUsername((String) session.getAttribute("user"));
+                groupusers.save(new PickemGroupUser());
+                return ResponseEntity.ok("Group created");
+            } else {
+                return ResponseEntity.badRequest().body("Group already exists");
+            }
+        } else {
+            return ResponseEntity.badRequest().body("User not logged in");
+        }
     }
-  }
-    
+
     //checking if user is logged in
     private boolean isLoggedIn(HttpSession session) {
-      if (session.getAttribute("user") != null) {
-        return true;
-      } else {
-        return false;
-      }
+        if (session.getAttribute("user") != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
+
     //checking if user is admin
     private boolean isAdmin(HttpSession session) {
-      if (session.getAttribute("user") != null) {
-          //user is logged in, will get data
-          if (session.getAttribute("admin") != null) {
-              return true;
-          }
-          
-      } 
-      return false;
-  }
-    
-    
-    
-    
-    
+        if (session.getAttribute("user") != null) {
+            //user is logged in, will get data
+            if (session.getAttribute("admin") != null) {
+                return true;
+            }
+
+        }
+        return false;
+    }
 
     //base url for all requests should be:
     // -> /nflpickem/groups
     // checks to see if user is logged in
-    
     private String getUserName(HttpSession session) {
         if (session.getAttribute("user") != null) {
             return (String) session.getAttribute("user");
@@ -119,7 +113,6 @@ public class PickemGroupController {
 
     //checking if user is admin
     // checks to see if user is an Admin
-   
     //NATHAN HUERTA - MR
     @GetMapping(value = "/nflpickem/groups/{user}/join/{group}")
     public ResponseEntity<PickemGroup> joinGroupForUser(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {
@@ -144,10 +137,9 @@ public class PickemGroupController {
                 return new ResponseEntity(null, HttpStatus.NOT_FOUND);
             }
         }
-        
+
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        
-        
+
     }
 
     //NATHAN HUERTA - MR
@@ -166,13 +158,13 @@ public class PickemGroupController {
                 //save the record
                 groupusers.save(myinvitation);
                 return new ResponseEntity(null, HttpStatus.OK);
-                
+
             } else {
                 //there is no invitation... so you no join :(
                 return new ResponseEntity(null, HttpStatus.NOT_FOUND);
             }
         }
-        
+
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
@@ -265,7 +257,7 @@ public class PickemGroupController {
 
             }
 
-        } 
+        }
 
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
@@ -293,4 +285,4 @@ public class PickemGroupController {
     }
 
     // END OF ETHAN'S CODE       
-        }
+}

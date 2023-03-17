@@ -14,7 +14,7 @@ import java.sql.Timestamp;
  */
 @Entity
 public class Game {
-    
+
     @Id
     int gameid;
 
@@ -36,6 +36,7 @@ public class Game {
     int team2score;
     int week;
     String link;
+
     /*
     //GAME goes next
             sql = "CREATE TABLE GAME (";
@@ -54,7 +55,7 @@ public class Game {
             sql = sql + " TEAM2SCORE INTEGER,";
             sql = sql + " WEEK INTEGER,";
             sql = sql + " LINK VARCHAR(150))";
-    */
+     */
 
     @Override
     public int hashCode() {
@@ -197,5 +198,5 @@ public class Game {
     public void setLink(String link) {
         this.link = link;
     }
-    
+
 }

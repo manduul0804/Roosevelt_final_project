@@ -4,12 +4,9 @@
  */
 package edu.roosevelt.seniorproject.nflpickem.user;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.util.Objects;
-
-
 
 /**
  *
@@ -17,6 +14,7 @@ import java.util.Objects;
  */
 @Entity
 public class User {
+
     @Id
     String username;
     String password;
@@ -45,14 +43,13 @@ public class User {
         final User other = (User) obj;
         return Objects.equals(this.username, other.username);
     }
-    
+
 //         String sql = "CREATE TABLE USER (";
 //            sql = sql + " USERNAME VARCHAR(30) PRIMARY KEY,";
 //            sql = sql + " PASSWORD VARCHAR(20),";
 //            sql = sql + " ADMIN BOOLEAN,";
 //            sql = sql + " NAME VARCHAR(50),";
 //            sql = sql + " EMAIL VARCHAR(50))";
-
     public String getUsername() {
         return username;
     }

@@ -43,53 +43,50 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class GameController {
-    
-    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
-    
+    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
     //simplifying code bit by bit
     @Autowired
     UserRepository users;
-    
+
     //simplifying code bit by bit
     private boolean isLoggedIn(HttpSession session) {
-        
+
         if (session.getAttribute("user") != null) {
-             return true;
-         } else {
-             return false;
-         }
+            return true;
+        } else {
+            return false;
+        }
     }
-    
+
     private boolean isAdmin(HttpSession session) {
         if (session.getAttribute("user") != null) {
             //user is logged in, will get data
             if (session.getAttribute("admin") != null) {
                 return true;
             }
-            
-        } 
+
+        }
         return false;
     }
-    
-    
+
     @Autowired
     GameRepository games;
-    
+
     @Autowired
     PickemGroupRepository groups;
-    
+
     @Autowired
     PickemGroupUserRepository groupusers;
 //<<<<<<< Updated upstream
-    
+
 //<<<<<<< HEAD
-  //  @GetMapping("/nflpickem/games/{week}")
+    //  @GetMapping("/nflpickem/games/{week}")
 //=======
 //=======
-     @Autowired
-     PickRepository picks;
+    @Autowired
+    PickRepository picks;
 //>>>>>>> main
 
 //      //Just a general get all games 
@@ -106,11 +103,9 @@ public class GameController {
     public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
         //is user logged in?
 //<<<<<<< HEAD
-            return new ResponseEntity(games.findAll(), HttpStatus.OK);
+        return new ResponseEntity(games.findAll(), HttpStatus.OK);
 
     }
-
- 
 
     //Get games by a specific week. You need to be logged in for this to work.
     @GetMapping("/nflpickem/games/byweek/{week}")
@@ -120,13 +115,13 @@ public class GameController {
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-        
+
     }
 
     //delete games based on a game id.
     @DeleteMapping("/nflpickem/games/{gameid}")
     public ResponseEntity<String> deleteGame(@PathVariable("gameid") Integer gameid, HttpSession session) throws SQLException {
-        
+
         if (this.isAdmin(session)) {
             if (games.existsById(gameid)) {
                 //delete it!
@@ -140,15 +135,13 @@ public class GameController {
         } else {
             return new ResponseEntity(gameid, HttpStatus.UNAUTHORIZED);
         }
-        
+
     }
-    
-   
 
     //update games score for team 1
     @PutMapping(value = "/nflpickem/games/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> updateGame(@RequestBody final Game g, HttpSession session) throws SQLException {
-        
+
         if (this.isAdmin(session)) {
             if (games.existsById(g.getGameid())) {
                 Optional<Game> opt = games.findById(g.getGameid());
@@ -169,17 +162,17 @@ public class GameController {
                 //save the real entry
                 games.save(real);
                 return new ResponseEntity(real, HttpStatus.OK);
-                
+
             } else {
                 return new ResponseEntity(g, HttpStatus.NOT_FOUND);
             }
-            
+
         } else {
             //unauthorized
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
+
     @Async
     public void scoreGames(Game game) {
         logger.info("Execute method asynchronously. "
@@ -202,10 +195,10 @@ public class GameController {
         logger.info("Straight UP Winner: " + suwinner);
         //update query for updating scores based on winner
         groupusers.updateScoreForSUOrATSSelections(suwinner, game.getGameid(), "SU");
-        
+
         //SELECT groupusers.username, groupusers.score from picks, groupusers where groupusers.username = picks.username AND 
         // picks.selection = 'winner' AND groupusers.grpname = picks.grpname
-         /*
+        /*
     String sql = "CREATE TABLE PICKEMGROUPUSER (";
             sql = sql + " GUID INTEGER PRIMARY KEY,";
             sql = sql + " USERNAME VARCHAR(50),";
@@ -225,23 +218,22 @@ public class GameController {
         
         
         
-    */
-        
+         */
         //ATS winner selection gets point iff outcome = spread + score
         //again three options
         String atswinner = "NOONE";
         //did selection win by at least the spread?
         //selection is correct
-        if ((game.getTeam1score()+game.getSpread()) > game.getTeam2score()) {
+        if ((game.getTeam1score() + game.getSpread()) > game.getTeam2score()) {
             //sn matches the selection from pick
             atswinner = game.getTeam1sn();
         }
         //selection is correct
-        if ((game.getTeam1score()+game.getSpread()) < game.getTeam2score()) {
+        if ((game.getTeam1score() + game.getSpread()) < game.getTeam2score()) {
             //sn matches the selection from pick
             atswinner = game.getTeam2sn();
         }
-        
+
         //now do the work
         logger.info("ATS Winner: " + atswinner);
         //update ATS winners
@@ -252,15 +244,15 @@ public class GameController {
         groupusers.updateScoreForSURVSelectionsWin(suwinner, game.getGameid());
         //losers now
         groupusers.updateScoreForSURVSelectionsLoss(suwinner, game.getGameid());
-        
+
         logger.info("Finished scoring for Game: " + game.getGameid());
-        
+
     }
 
     //update games score for team 1
     @PutMapping(value = "/nflpickem/games/updatescore", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> updateGameScores(@RequestBody final Game g, HttpSession session) throws SQLException {
-        
+
         if (this.isAdmin(session)) {
             if (games.existsById(g.getGameid())) {
                 Optional<Game> opt = games.findById(g.getGameid());
@@ -272,19 +264,17 @@ public class GameController {
                 games.save(real);
                 scoreGames(real);
                 return new ResponseEntity(real, HttpStatus.OK);
-                
+
             } else {
                 return new ResponseEntity(g, HttpStatus.NOT_FOUND);
             }
-            
+
         } else {
             //unauthorized
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
-    
-    
+
     //base url for all requests should be:
     // -> /nflpickem/games
 }
