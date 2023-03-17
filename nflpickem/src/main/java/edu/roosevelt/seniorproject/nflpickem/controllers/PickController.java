@@ -14,6 +14,7 @@ import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepo
 import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import static java.util.Collections.list;
 import java.util.List;
 import java.util.Optional;
@@ -21,11 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -122,6 +126,61 @@ public class PickController {
         }
         
     }
+    
+    
+    @PutMapping(value = "/nflpickem/picks/makepicks", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Pick>> makePicks(@RequestBody final List<Pick> mypicks, HttpSession session) {
+        if (this.isLoggedIn(session)) {
+            //get first pick
+            Pick first = mypicks.get(0);
+            String uname = this.getUsername(session);
+            //fix for admin
+            if (this.isAdmin(session)) {
+                uname = first.getUsername();
+            }
+
+            //check user
+            //check if appropriate user
+            if (uname.equals(first.getUsername())) {
+                //now we have to check if group matches
+                if (picks.existsByUsernameAndGrpname(uname, first.getGrpname())) {
+                    //group exists.. does the pick already exist
+                    List<Pick> resultingPicks = new ArrayList();
+                    //loop through the picks
+                    for (Pick p : mypicks) {
+                        if (picks.existsByUsernameAndGrpnameAndGameid(uname, first.getGrpname(), p.getGameid())) {
+                            Pick real = picks.findByUsernameAndGrpnameAndGameid(uname, first.getGrpname(), p.getGameid());
+                            real.setSelection(p.getSelection());
+                            picks.save(real);
+                            resultingPicks.add(real);
+
+                        } else {
+                            p.setUsername(uname);
+                            p.setGrpname(first.getGrpname());
+                            picks.save(p);
+                            resultingPicks.add(p);
+                        }
+                    }
+
+                    return new ResponseEntity(resultingPicks, HttpStatus.OK);
+
+                } else {
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+                }
+
+            } else {
+                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+            }
+
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    
+    
+    
+    
     
     
    

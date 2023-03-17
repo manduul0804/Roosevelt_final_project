@@ -18,11 +18,7 @@ public interface PickRepository extends CrudRepository<Pick, String> {
 
     List<Pick> findByUsernameAndGrpnameAndWeek(String user, String group, int week);
 
-//<<<<<<< HEAD
-    //int countByWeek(int week);
-    //Karen Code for picks/username
-    @Query(value = "SELECT * FROM PICKS WHERE USERNAME = ?1", nativeQuery = true)
-    List<Pick> findSpecialUserByUsername(String username);
+
 
     List<Pick> findBySelectionAndWeek(String sel, int week);
 
@@ -30,5 +26,11 @@ public interface PickRepository extends CrudRepository<Pick, String> {
 
 //>>>>>>> main
     public Iterable<Pick> findByUsername(String username);
+    
+    boolean existsByUsernameAndGrpname(String username, String grpname);
+    
+    boolean existsByUsernameAndGrpnameAndGameid(String username, String grpname, int gameid);
+    
+    Pick findByUsernameAndGrpnameAndGameid(String username, String grpname, int gameid);
 
 }
