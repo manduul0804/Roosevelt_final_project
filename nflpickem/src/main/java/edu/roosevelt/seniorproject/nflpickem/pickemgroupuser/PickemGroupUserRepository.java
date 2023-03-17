@@ -66,12 +66,24 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
     @Query(value = "SELECT * "
             + "FROM pickemgroupuser "
             + "WHERE STATUS = 'standing' and "
-            + "EXISTS (SELECT * " 
-            + "FROM pickemgroup " 
+            + "EXISTS (SELECT * "
+            + "FROM pickemgroup "
             + "WHERE pickemgroupuser.GRPNAME = pickemgroup.NAME) "
             + "ORDER BY GRPNAME, SCORE DESC", nativeQuery = true)
-    List<PickemGroupUser> findAllUserGroupSorted();
+    List<StandingPicks> findAllUserGroupSorted();
     
-    
+    //This class added only to show the necassary data from the database
+    //When I used List<PickemGroupUser> in findAllUserGroupSorted() function
+    //in postman I was getting 3 additional data that is not in the 
+    //pickemgroupuser data table.
+    //The additional datas were: isMember, isLeader, and isAdmin
+    public interface StandingPicks{
+        public int getGuid();
+        public String getUsername();
+        public String getGrpname();
+        public String getStatus();
+        public int getScore();
+        public boolean getDone();
+    }
 
 }

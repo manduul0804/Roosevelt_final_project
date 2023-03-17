@@ -114,19 +114,13 @@ public class AdminController {
 
     }
 
-}
-    }
-        
-     @GetMapping("/nflpickem/groups/highscores")
+    @GetMapping("/nflpickem/groups/highscores")
     public ResponseEntity<List<PickemGroupUser>> getHighScoresForGroup(HttpSession session) {
         if (isLoggedIn(session)) {
             return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
-    } 
-        
-    
-    
-    }   
-    
+    }
+
+}

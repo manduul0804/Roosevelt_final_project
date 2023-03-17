@@ -5,7 +5,6 @@
  */
 package edu.roosevelt.seniorproject.nflpickem;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.exception.ConstraintViolationException;
@@ -26,40 +25,32 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 @ControllerAdvice
 public class MyExceptionHandler {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(MyExceptionHandler.class);
-    
-    
-    
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ValidationErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         logger.warn("We have an exception: MANV");
         //let's process
         ValidationErrorMessage vem = new ValidationErrorMessage();
-        
+
         BindingResult br = e.getBindingResult();
-        
-        
+
         for (FieldError fe : br.getFieldErrors()) {
             FieldErrorMessage fem = new FieldErrorMessage();
             fem.setField(fe.getField());
             fem.setMessage(fe.getDefaultMessage());
             vem.addFieldErrorMessage(fem);
         }
-        
-        
-        
-        return new ResponseEntity(vem,HttpStatus.BAD_REQUEST);
-        
+
+        return new ResponseEntity(vem, HttpStatus.BAD_REQUEST);
 
     }
-    
-    
+
     @ExceptionHandler(ConstraintViolationException.class)
     ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
         logger.warn("We have an exception");
         return new ResponseEntity<>("not valid due to validation error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-    
-    
+
 }

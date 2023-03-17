@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class NflpickemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(NflpickemApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(NflpickemApplication.class, args);
+    }
 
 }

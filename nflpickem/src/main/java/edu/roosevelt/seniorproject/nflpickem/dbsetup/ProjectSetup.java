@@ -49,11 +49,11 @@ public class ProjectSetup {
             sql = sql + " TEAM2SCORE INTEGER,";
             sql = sql + " WEEK INTEGER,";
             sql = sql + " LINK VARCHAR(150))";
-            
+
             //call db
             conn.createStatement().execute(sql);
             System.out.println("Table GAME created!");
-            
+
             System.out.println("Create Group (depends on USER)");
             /*
             groups
@@ -61,9 +61,8 @@ group name -> PK
 group type
 group admin FK
 
-            */
-            
-            
+             */
+
             System.out.println("DB Complete!");
         } catch (Exception e) {
             System.out.println("oops:" + e);
@@ -80,28 +79,26 @@ group admin FK
             sql = sql + " ADMIN VARCHAR(50),";
             sql = sql + " FOREIGN KEY (ADMIN) REFERENCES USER(USERNAME))";
             //admin must be a real user
-                       
+
             System.out.println(sql);
             conn.createStatement().execute(sql);
             System.out.println("Table GROUP created!");
-            
+
         } catch (Exception e) {
             System.out.println("oops:" + e);
         }
-        
+
         try {
             System.out.println("Create GROUPUSER (depends on USER/GROUP");
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
                     "user", "user");
             //GROUPUSER goes next
-            
-            
-            
+
             String sql = "CREATE TABLE PICKEMGROUPUSER (";
             sql = sql + " GUID INTEGER PRIMARY KEY,";
             sql = sql + " USERNAME VARCHAR(50),";
-            
+
             sql = sql + " GRPNAME VARCHAR(25),";
             sql = sql + " STATUS VARCHAR(50),";
             sql = sql + " SCORE INTEGER,";
@@ -110,18 +107,15 @@ group admin FK
             //now we need to enforce referential integrity
             sql = sql + " FOREIGN KEY (USERNAME) REFERENCES USER(USERNAME),";
             sql = sql + " FOREIGN KEY (GRPNAME) REFERENCES PICKEMGROUP(NAME))";
-                       
+
             System.out.println(sql);
             conn.createStatement().execute(sql);
             System.out.println("Table PICKEMGROUPUSER created!");
-            
+
         } catch (Exception e) {
             System.out.println("oops:" + e);
         }
-        
-        
-        
-        
+
         System.out.println("Create Pick (depends on GAME/USER/GROUP");
         try {
             System.out.println("Create GROUPUSER (depends on USER/GROUP");
@@ -136,9 +130,8 @@ Gameid -> FK
 GroupName -> FK
 Teamshortname 
 
-            */
-            
-            
+             */
+
             String sql = "CREATE TABLE PICKS (";
             sql = sql + " PID INTEGER PRIMARY KEY,";
             sql = sql + " USERNAME VARCHAR(50),";
@@ -150,11 +143,11 @@ Teamshortname
             sql = sql + " FOREIGN KEY (USERNAME) REFERENCES USER(USERNAME),";
             sql = sql + " FOREIGN KEY (GAMEID) REFERENCES GAME(GAMEID),";
             sql = sql + " FOREIGN KEY (GRPNAME) REFERENCES PICKEMGROUP(NAME))";
-                       
+
             System.out.println(sql);
             conn.createStatement().execute(sql);
             System.out.println("Table PICKEMGROUPUSER created!");
-            
+
         } catch (Exception e) {
             System.out.println("oops:" + e);
         }

@@ -14,8 +14,9 @@ import java.util.Objects;
  * @author mruth
  */
 @Entity
-@Table(name="PICKEMGROUP ")
+@Table(name = "PICKEMGROUP ")
 public class PickemGroup {
+
     @Id
     String name;
     String type;
@@ -42,8 +43,7 @@ public class PickemGroup {
         final PickemGroup other = (PickemGroup) obj;
         return Objects.equals(this.name, other.name);
     }
-    
-    
+
     /*
     //GROUP goes next
             String sql = "CREATE TABLE PICKEMGROUP (";
@@ -52,8 +52,7 @@ public class PickemGroup {
             sql = sql + " ADMIN VARCHAR(50),";
             sql = sql + " FOREIGN KEY (ADMIN) REFERENCES USER(USERNAME))";
             //admin must be a real user
-    */
-
+     */
     public String getName() {
         return name;
     }
@@ -77,6 +76,5 @@ public class PickemGroup {
     public void setAdmin(String admin) {
         this.admin = admin;
     }
-    
-    
+
 }

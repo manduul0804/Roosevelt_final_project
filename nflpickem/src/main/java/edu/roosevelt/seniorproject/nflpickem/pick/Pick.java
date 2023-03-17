@@ -14,9 +14,9 @@ import java.util.Objects;
  * @author mruth
  */
 @Entity
-@Table(name="PICKS")
-public class Pick implements java.io.Serializable{
-    
+@Table(name = "PICKS")
+public class Pick implements java.io.Serializable {
+
     @Id
     int pid;
 
@@ -41,8 +41,6 @@ public class Pick implements java.io.Serializable{
         final Pick other = (Pick) obj;
         return this.pid == other.pid;
     }
-
-    
 
     public int getPid() {
         return pid;
@@ -102,10 +100,4 @@ public class Pick implements java.io.Serializable{
         this.week = week;
     }
 
-    
-    
-    
-    
-    
-    
 }

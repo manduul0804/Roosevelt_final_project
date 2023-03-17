@@ -29,18 +29,18 @@ public class InitGame {
         // TODO code application logic here
         Scanner scanner = new Scanner(new File("week1matchups.txt"));
         Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/nflpickem",
-                    "user", "user");
+                "jdbc:mysql://localhost:3306/nflpickem",
+                "user", "user");
 
-            System.out.println("Create USER/GAME (bases)");
-            int counter = 10000;
+        System.out.println("Create USER/GAME (bases)");
+        int counter = 10000;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             //System.out.println("line: " + line);
             Scanner lineScanner = new Scanner(line);
             lineScanner.useDelimiter("\\(|\\)");
             int i = 0;
-            
+
             while (lineScanner.hasNext()) {
                 //0 token is home team full name
                 String team1Name = lineScanner.next().trim();
@@ -51,16 +51,14 @@ public class InitGame {
                 //remove the vs
                 team2Name = team2Name.substring(3).trim();
                 //System.out.println("team2Name" + team2Name);
-                String team2SN =  lineScanner.next().trim();
-                
+                String team2SN = lineScanner.next().trim();
+
                 //System.out.println(team1Name + " (" + team1SN + ") vs " + team2Name + " (" + team2SN + ")");
                 //timestamp set for noon on 9/11
                 Timestamp ts = Timestamp.valueOf("2022-09-11 12:00:00.000");
                 String teamRec = "0-0";
                 int week = 1;
-                
-                
-                
+
                 String sql = "INSERT INTO GAME VALUES (";
                 sql = sql + counter++ + ",";
                 sql = sql + "'" + team1Name + "',";
@@ -77,25 +75,20 @@ public class InitGame {
                 sql = sql + "" + 0 + ",";
                 sql = sql + "" + week + ",";
                 sql = sql + "'')";
-                
-                
-                System.out.println(sql); 
-                
+
+                System.out.println(sql);
+
                 try {
                     conn.createStatement().execute(sql);
-                    
+
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-                
-                
-                
+
             }
-            
-           
+
         }
-        
-        
+
     }
-    
+
 }
