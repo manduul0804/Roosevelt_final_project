@@ -168,6 +168,59 @@ public class PickemGroupController {
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
+    
+    //Stuart Manning - MR
+    @DeleteMapping(value = "/nflpickem/groups/decline/{group}")
+    public ResponseEntity<PickemGroup> declineGroup(@PathVariable("group") final String group, HttpSession session) {
+
+        if (this.isLoggedIn(session)) {
+            //what's your username?
+            String username = this.getUserName(session);
+            //is there an invitation
+            if (groupusers.existsByUsernameAndGrpname(username, group)) {
+                //get the record
+                PickemGroupUser myinvitation = groupusers.findByUsernameAndGrpname(username, group);
+                //get rid of the record
+                groupusers.delete(myinvitation);
+               
+                return new ResponseEntity(null, HttpStatus.OK);
+
+            } else {
+                //there is no invitation... so you no join :(
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            }
+        }
+
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+    }
+    
+    //Stuart Manning - MR
+    @DeleteMapping(value = "/nflpickem/groups/{user}/decline/{group}")
+    public ResponseEntity<PickemGroup> declineGroupForUser(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {
+        if (this.isLoggedIn(session)) {
+            //what's your username?
+            String username = this.getUserName(session);
+            //is there an invitation
+            if (groupusers.existsByUsernameAndGrpname(user, group)) {
+                //authorization?
+                if (username.equals(user) || this.isAdmin(session)) {
+                    //get the record
+                    PickemGroupUser myinvitation = groupusers.findByUsernameAndGrpname(user, group);
+                    //get rid of the record
+                    groupusers.delete(myinvitation);
+                    //return
+                    return new ResponseEntity(null, HttpStatus.OK);
+                }
+            } else {
+                //there is no invitation... so you no join :(
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            }
+        }
+
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+    }
 
     // BEGINNING OF ETHAN'S CODE
     // create a group
