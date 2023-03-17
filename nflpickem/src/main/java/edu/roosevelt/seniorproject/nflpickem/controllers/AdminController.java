@@ -9,6 +9,7 @@ import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
 import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository.HighScore;
+import edu.roosevelt.seniorproject.nflpickem.pick.Pick;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
 import edu.roosevelt.seniorproject.nflpickem.user.User;
@@ -71,6 +72,18 @@ public class AdminController {
     @Autowired
     PickRepository picks;
 
+    @GetMapping("/nflpickem/picks/byweek/{week}")
+    public ResponseEntity<List<Pick>> getPicksByweek(@PathVariable("week") int week, HttpSession session) {
+        if (this.isAdmin(session)) {
+            return new ResponseEntity(picks.countByWeek(week), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    
+    
+    
     //OMAR NAVARRO -MR
     @GetMapping("/nflpickem/admin/numpicks")
     public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
