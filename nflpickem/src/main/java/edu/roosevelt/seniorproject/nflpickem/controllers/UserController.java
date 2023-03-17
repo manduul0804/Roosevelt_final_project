@@ -39,17 +39,7 @@ public class UserController {
     @Autowired
     UserRepository users;
 
-    @GetMapping("/home")
-    public String testHome(HttpSession session) {
-        if (session != null && session.getAttribute("user") != null) {
-            return (String) session.getAttribute("user");
-
-        } else if (session != null) {
-            return "good session, no att";
-        } else {
-            return "no session";
-        }
-    }
+    
 
     //simplifying code bit by bit
     private boolean isLoggedIn(HttpSession session) {
@@ -146,12 +136,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/nflpickem/users/allusers2")
-    public ResponseEntity<List<User>> getAllUsers2(HttpSession session) {
-
-        return new ResponseEntity(users.findAll(), HttpStatus.OK);
-
-    }
+    
 
     @DeleteMapping("/nflpickem/users/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username, HttpSession session) {

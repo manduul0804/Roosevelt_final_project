@@ -8,7 +8,6 @@ import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
 import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
-import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository.HighScore;
 import edu.roosevelt.seniorproject.nflpickem.pick.Pick;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
@@ -19,7 +18,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -82,9 +80,19 @@ public class AdminController {
     }
     
     
+    @GetMapping("/nflpickem/admin/numusers")
+    public ResponseEntity<Long> getTotalNumberOfUsers(HttpSession session) {
+        if (this.isAdmin(session)) {
+
+            return new ResponseEntity(users.count(), HttpStatus.UNAUTHORIZED);
+
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
     
     
-    //OMAR NAVARRO -MR
+    
     @GetMapping("/nflpickem/admin/numpicks")
     public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -96,7 +104,7 @@ public class AdminController {
         }
     }
     
-    //Riley -MR
+    
     @GetMapping("/nflpickem/admin/numgroups")
     public ResponseEntity<Long> getTotalNumberOfGroups(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -122,15 +130,7 @@ public class AdminController {
     
     
 
-    @GetMapping("/nflpickem/admin/allgroups")
-    public ResponseEntity<List<User>> getAllgroups(HttpSession session) {
-
-        if (this.isAdmin(session)) {
-            return new ResponseEntity(users.findAll(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-        }
-    }
+    
      
 
     @GetMapping("/nflpickem/users/standingpicks")
