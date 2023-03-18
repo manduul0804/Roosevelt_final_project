@@ -19,7 +19,7 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
 
     List<Game> findByWeek(int week);
 
-    List<Game> findByKickoffAfterOrderByKickoffDesc(Timestamp ts);
+    Game findFirstByKickoffAfterOrderByKickoff(Timestamp ts);
     
-  
+    
 }

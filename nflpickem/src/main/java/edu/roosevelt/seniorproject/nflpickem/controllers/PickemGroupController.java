@@ -10,13 +10,9 @@ import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepo
 import org.springframework.web.bind.annotation.GetMapping;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroup;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
-import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
-//<<<<<<< HEAD
-import java.util.List;
 
-//=======
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-//<<<<<<< HEAD
-//=======
+
 import org.springframework.http.MediaType;
-//>>>>>>> main
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,23 +55,55 @@ public class PickemGroupController {
     @Autowired
     PickemGroupUserRepository groupusers;
 
-//creating a group
-    @PostMapping("/nflpickem/groups/create")
-    public ResponseEntity<String> createGroup(HttpSession session, String groupname) {
+    //creating a group
+    @PostMapping(value = "/nflpickem/groups/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> createGroup(PickemGroup group, HttpSession session) {
         if (isLoggedIn(session)) {
-            if (groups.findByName(groupname) == null) {
-                //group doesn't exist, create it
-                groups.save(new PickemGroup());
-                //add user to group
-                User user = users.findByUsername((String) session.getAttribute("user"));
-                groupusers.save(new PickemGroupUser());
-                return ResponseEntity.ok("Group created");
+
+            if (groups.existsByName(group.getName())) {
+                //group doesn't already exist
+                //now check for admin
+                String username = this.getUserName(session);
+                //check for admin
+                if (username.equals(group.getAdmin()) || this.isAdmin(session)) {
+                    //allowed to create group
+                    groups.save(group);
+                    //created group, now create entry for admin in groupuser
+                    PickemGroupUser gu = new PickemGroupUser();
+                    gu.setDone(false);
+                    gu.setGrpname(group.getName());
+                    gu.setScore(0);
+                    gu.setStatus("OK");
+                    gu.setUsername(username);
+
+                    //need to set guid
+                    int guid = 1000;
+                    boolean done = false;
+                    while (!done) {
+                        try {
+                            gu.setGuid(guid++);
+                            groupusers.save(gu);
+                            done = true;
+
+                        } catch (Exception e) {
+                            //do nothing...
+                        }
+                    }
+
+                    return new ResponseEntity(null, HttpStatus.OK);
+
+                } else {
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+                }
+
             } else {
-                return ResponseEntity.badRequest().body("Group already exists");
+                return new ResponseEntity(null, HttpStatus.FOUND);
             }
+
         } else {
-            return ResponseEntity.badRequest().body("User not logged in");
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
+
     }
 
     //checking if user is logged in
@@ -111,9 +138,7 @@ public class PickemGroupController {
         }
     }
 
-    //checking if user is admin
-    // checks to see if user is an Admin
-    //NATHAN HUERTA - MR
+    //join group using username/group
     @GetMapping(value = "/nflpickem/groups/{user}/join/{group}")
     public ResponseEntity<PickemGroup> joinGroupForUser(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {
         if (this.isLoggedIn(session)) {
@@ -142,7 +167,7 @@ public class PickemGroupController {
 
     }
 
-    //NATHAN HUERTA - MR
+    //join group using group (logged in user)
     @GetMapping(value = "/nflpickem/groups/join/{group}")
     public ResponseEntity<PickemGroup> joinGroup(@PathVariable("group") final String group, HttpSession session) {
 
@@ -168,8 +193,8 @@ public class PickemGroupController {
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
-    
-    //Stuart Manning - MR
+
+    //decline invitation (logged in user) given group
     @DeleteMapping(value = "/nflpickem/groups/decline/{group}")
     public ResponseEntity<PickemGroup> declineGroup(@PathVariable("group") final String group, HttpSession session) {
 
@@ -182,7 +207,7 @@ public class PickemGroupController {
                 PickemGroupUser myinvitation = groupusers.findByUsernameAndGrpname(username, group);
                 //get rid of the record
                 groupusers.delete(myinvitation);
-               
+
                 return new ResponseEntity(null, HttpStatus.OK);
 
             } else {
@@ -194,8 +219,8 @@ public class PickemGroupController {
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
-    
-    //Stuart Manning - MR
+
+    //decline invitation given group/username
     @DeleteMapping(value = "/nflpickem/groups/{user}/decline/{group}")
     public ResponseEntity<PickemGroup> declineGroupForUser(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {
         if (this.isLoggedIn(session)) {
@@ -221,27 +246,58 @@ public class PickemGroupController {
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
-
-    // BEGINNING OF ETHAN'S CODE
-    // create a group
-    @PostMapping(value = "/nflpickem/groups/creategroup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PickemGroup> createGroup(@RequestBody final PickemGroup grp, HttpSession session) {
+    
+    
+    //Invite given group/username
+    @GetMapping(value = "/nflpickem/groups/{user}/isinvitedto/{group}")
+    public ResponseEntity<PickemGroupUser> inviteUserToGroup(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {
         if (this.isLoggedIn(session)) {
-            if (groups.existsById(grp.getName())) {
-                // if group exists:
-                return new ResponseEntity(grp, HttpStatus.FOUND);
+            //what's your username?
+            String username = this.getUserName(session);
+            //is there an invitation
+            if (groupusers.existsByUsernameAndGrpname(user, group)) {
+                //already there?
+                //there is no invitation... so you no join :(
+                return new ResponseEntity(null, HttpStatus.FOUND);
             } else {
-                if (!this.isAdmin(session)) {
-                    grp.setAdmin((String) session.getAttribute("user"));
-                }
-                // create new group
-                groups.save(grp);
-                return new ResponseEntity(grp, HttpStatus.OK);
+                //create it
+                //first get the gorup
+                PickemGroup grp = groups.findByName(group);
+                //authorization?
+                if (username.equals(grp.getAdmin()) || this.isAdmin(session)) {
+                    //create the record
+                    PickemGroupUser invite = new PickemGroupUser();
+                    invite.setDone(false);
+                    invite.setGrpname(group);
+                    invite.setScore(0);
+                    invite.setStatus("invited");
+                    invite.setUsername(username);
+
+                    //need to set guid
+                    int guid = 1000;
+                    boolean done = false;
+                    while (!done) {
+                        try {
+                            invite.setGuid(guid++);
+                            groupusers.save(invite);
+                            done = true;
+
+                        } catch (Exception e) {
+                            //do nothing...
+                        }
+                    }
+                    
+                    return new ResponseEntity(invite, HttpStatus.OK);
+                } 
             }
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+            
         }
+
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
     }
+
+    
     // view all groups as an admin
 
     @GetMapping("/nflpickem/groups/allgroups")
@@ -255,6 +311,7 @@ public class PickemGroupController {
         }
     }
 
+    //get the leaderboard for a given group (must be admin or in the group)
     @GetMapping("/nflpickem/groups/leaderboard/{group}")
     public ResponseEntity<List<PickemGroupUser>> getGroupLeaderboard(@PathVariable("group") String group, HttpSession session) {
 
@@ -284,6 +341,7 @@ public class PickemGroupController {
                 Optional<PickemGroup> og = groups.findById(grp.getName());
                 PickemGroup g = og.get();
                 if ((session.getAttribute("user").equals(g.getAdmin()) || this.isAdmin(session))) {
+                    //can only change type
                     g.setType(grp.getType());
                     groups.save(grp);
                     return new ResponseEntity(grp, HttpStatus.OK);
@@ -298,6 +356,7 @@ public class PickemGroupController {
         }
     }
 
+    //get all groups the logged in user belongs to
     @GetMapping("/nflpickem/groups/allgroups/{username}")
     public ResponseEntity<List<PickemGroupUser>> getAllGroups(@PathVariable("username") String username, HttpSession session) {
 
@@ -319,7 +378,7 @@ public class PickemGroupController {
 //base url for all requests should be:
 // -> /nflpickem/groups 
     
-    
+    //get all groups i've been invited to
     @GetMapping("/nflpickem/groups/byinvite")
     public ResponseEntity<List<PickemGroupUser>> getGroupsByInvite(HttpSession session) {
         String status = "invited";
@@ -332,28 +391,38 @@ public class PickemGroupController {
         }
 
     }
-    
-    
-    
-    
-    // delete a group
+
+    // delete a group by groupname (must be admin or admin of group)
     @DeleteMapping("/nflpickem/groups/{groupname}")
     public ResponseEntity<String> deleteGroup(@PathVariable("groupname") String groupname, HttpSession session) {
         if (this.isLoggedIn(session)) {
-            if (this.isAdmin(session)) {
-                if (groups.existsById(groupname)) {
-                    groups.deleteById(groupname);
+            //get username
+            String username = this.getUserName(session);
+            //does the group exist?
+            if (groups.existsByName(groupname)) {
+                //get the group
+                PickemGroup grp = groups.findByName(groupname);
+                //are you authorized to delete?
+                if (username.equals(grp.getAdmin()) || this.isAdmin(session)) {
+                    //you are?
+                    //delete all group users
+                    groupusers.deleteByGrpname(groupname);
+                    //delete the group
+                    groups.delete(grp);
                     return new ResponseEntity(groupname, HttpStatus.OK);
+                    
                 } else {
-                    return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
                 }
-            } else {
-                return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
-            }
-        } else {
-            return new ResponseEntity(groupname, HttpStatus.UNAUTHORIZED);
-        }
-    }
 
-    // END OF ETHAN'S CODE       
+            } else {
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            }
+
+        } else {
+
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+
+    }
 }

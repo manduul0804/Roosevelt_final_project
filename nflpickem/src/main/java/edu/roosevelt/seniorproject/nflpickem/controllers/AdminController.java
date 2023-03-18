@@ -11,7 +11,6 @@ import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
 import edu.roosevelt.seniorproject.nflpickem.pick.Pick;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
-import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
@@ -133,16 +132,16 @@ public class AdminController {
     
      
 
-    @GetMapping("/nflpickem/users/standingpicks")
+    @GetMapping("/nflpickem/admin/allstandings")
     public ResponseEntity<List<PickemGroupUser>> getAllGroupUser(HttpSession session) {
         if (this.isAdmin(session)) {
-            return new ResponseEntity(groupusers.findAllUserGroupSorted(), HttpStatus.OK);
+            return new ResponseEntity(groupusers.findByStatusOrderByGrpnameAscScoreDesc("OK"), HttpStatus.OK);
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
 
-    @GetMapping("/nflpickem/groups/highscores")
+    @GetMapping("/nflpickem/admin/highscores")
     public ResponseEntity<List<PickemGroupUser>> getHighScoresForGroup(HttpSession session) {
         if (isLoggedIn(session)) {
             return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);

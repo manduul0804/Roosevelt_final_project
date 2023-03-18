@@ -6,7 +6,6 @@ package edu.roosevelt.seniorproject.nflpickem.controllers;
 
 import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
@@ -38,8 +37,6 @@ public class UserController {
 
     @Autowired
     UserRepository users;
-
-    
 
     //simplifying code bit by bit
     private boolean isLoggedIn(HttpSession session) {
@@ -106,23 +103,15 @@ public class UserController {
                     Optional<User> opt = users.findById(username);
                     if (opt.isPresent()) {
                         User user = opt.get();
-                        user.setEmail("mruth@roosevelt.edu");
-                        users.save(user);
-
                         return new ResponseEntity(user, HttpStatus.OK);
-
                     }
+                } else {
+                    return new ResponseEntity(null, HttpStatus.NOT_FOUND);
                 }
-                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-
-            } else {
-                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
             }
-
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
 
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/nflpickem/users/allusers")
@@ -135,8 +124,6 @@ public class UserController {
         }
 
     }
-
-    
 
     @DeleteMapping("/nflpickem/users/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username, HttpSession session) {

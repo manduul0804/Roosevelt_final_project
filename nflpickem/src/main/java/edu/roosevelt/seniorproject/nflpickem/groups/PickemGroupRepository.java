@@ -17,33 +17,18 @@ public interface PickemGroupRepository extends CrudRepository<PickemGroup, Strin
 
     PickemGroup findByName(String groupname);
 
-    @Query(value = "select distinct type from pickemgroup", nativeQuery = true)
-    List<String> findGroupTypes();
-
-//    @Query(value = "SELECT name,"
-//            + "(SELECT max(score) "
-//            + "FROM pickemgroupuser "
-//            + "WHERE pickemgroup.NAME = pickemgroupuser.GRPNAME) "
-//            + "AS Score "
-//            + "FROM pickemgroup "
-//            + "GROUP BY NAME "
-//            + "HAVING Score > 0", nativeQuery = true)
-            
-            
-    
-    @Query(value = "SELECT name,"
-            + "(SELECT max(score) "
-            + "FROM pickemgroupuser "
-            + "WHERE pickemgroup.NAME = pickemgroupuser.GRPNAME) "
-            + "AS Score "
-            + "FROM pickemgroup "
-            + "GROUP BY NAME "
-            + "HAVING Score > 0", nativeQuery = true)        
+    boolean existsByName(String groupname);
+   
+    @Query(value = "SELECT any_value(pickemgroupuser.USERNAME) AS USERNAME, max(score) AS SCORE, "
+            + "pickemgroup.TYPE FROM pickemgroupuser, pickemgroup WHERE pickemgroup.NAME = "
+            + "pickemgroupuser.GRPNAME GROUP BY pickemgroup.TYPE ", nativeQuery = true)        
     List<HighScore> getHighScoresForEachGroupType();
 
     public interface HighScore {
 
-        public String getName();
+        public String getUserName();
+        
+        public String getType();
 
         public int getScore();
     }

@@ -5,19 +5,14 @@
 package edu.roosevelt.seniorproject.nflpickem.controllers;
 
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
-import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroup;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
 import edu.roosevelt.seniorproject.nflpickem.pick.Pick;
 import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
-import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
-import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
-import static java.util.Collections.list;
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -99,7 +93,7 @@ public class PickController {
         
     }
 
- 
+    //get picks by week, group, user
     @GetMapping("/nflpickem/picks/{username}/group/{group}/week/{week}")
     public ResponseEntity<List<Pick>> getByUsername(@PathVariable("username") String username,@PathVariable("group") String grp, @PathVariable("week") int week, HttpSession session) {
     
@@ -127,7 +121,7 @@ public class PickController {
         
     }
     
-    
+    //make picks 
     @PutMapping(value = "/nflpickem/picks/makepicks", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Pick>> makePicks(@RequestBody final List<Pick> mypicks, HttpSession session) {
         if (this.isLoggedIn(session)) {
