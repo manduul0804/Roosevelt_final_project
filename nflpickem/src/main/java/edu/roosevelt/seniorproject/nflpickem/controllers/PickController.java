@@ -92,6 +92,31 @@ public class PickController {
         return (String)session.getAttribute("user");
         
     }
+    
+    //get num of missing picks by week, group, user
+    @GetMapping("/nflpickem/picks/missing/{username}/group/{group}/week/{week}")
+    public ResponseEntity<Long> getNumberOfMissingPicks(@PathVariable("username") String username,@PathVariable("group") String grp, @PathVariable("week") int week, HttpSession session) { 
+        
+        if (this.isLoggedIn(session)) {
+            //get the username
+            String user = this.getUsername(session);
+            //are you authorized to know?
+            if (user.equals(username) || this.isAdmin(session)) {
+                //get picks
+                int picksin = picks.countByUsernameAndGrpnameAndWeek(username, grp, week);
+                //get games
+                int nogames = games.countByWeek(week);
+                //return the difference
+                return new ResponseEntity(nogames-picksin, HttpStatus.OK);
+                
+            }
+        }
+
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+        
+    }
+    
 
     //get picks by week, group, user
     @GetMapping("/nflpickem/picks/{username}/group/{group}/week/{week}")

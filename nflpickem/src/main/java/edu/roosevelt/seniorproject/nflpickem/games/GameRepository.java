@@ -15,7 +15,7 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface GameRepository extends CrudRepository<Game, Integer> {
 
-    
+    int countByWeek(int week);
 
     List<Game> findByWeek(int week);
 
