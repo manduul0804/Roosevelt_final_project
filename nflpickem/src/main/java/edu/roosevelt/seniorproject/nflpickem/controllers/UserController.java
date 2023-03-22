@@ -81,7 +81,7 @@ public class UserController {
         return new ResponseEntity(user, HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/nflpickem/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> insertUser(@RequestBody final User u, HttpSession session) {
         if (users.existsById(u.getUsername())) {
             //If user exists
@@ -114,7 +114,7 @@ public class UserController {
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/nflpickem/users/allusers")
+    @GetMapping("/nflpickem/user/allusers")
     public ResponseEntity<List<User>> getAllUsers(HttpSession session) {
 
         if (this.isAdmin(session)) {
@@ -125,7 +125,7 @@ public class UserController {
 
     }
 
-    @DeleteMapping("/nflpickem/users/{username}")
+    @DeleteMapping("/nflpickem/user/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username, HttpSession session) {
         //if admin
         if (this.isAdmin(session)) {
@@ -152,7 +152,7 @@ public class UserController {
         return "OK";
     }
 
-    @PutMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/nflpickem/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@RequestBody final User u, HttpSession session) throws SQLException {
         // Checks if the user is logged in
         if (this.isLoggedIn(session)) {

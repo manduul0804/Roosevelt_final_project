@@ -1,0 +1,17 @@
+<h1>Please login</h1>
+<form (ngSubmit)="onSubmit()" novalidate #myform="ngForm">
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td>Username:</td>
+            <td><input type="text" name="username" required [(ngModel)]="user.username" #username="ngModel"></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" name="password" required [(ngModel)]="user.password" #password="ngModel"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" [disabled]="!myform.form.valid" value="Login">
+                <input type="reset" value="Start Over"></td>
+
+        </tr>
+    </table>
