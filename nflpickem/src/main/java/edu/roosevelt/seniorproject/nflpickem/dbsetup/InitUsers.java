@@ -31,11 +31,20 @@ public class InitUsers {
             System.out.println("Create USER/GAME (bases)");
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                System.out.println("line: " + line);
+//                System.out.println("line: " + line);
                 Scanner lineScanner = new Scanner(line);
 
                 //Get data line by line and seperate it by ws
                 while (lineScanner.hasNext()) {
+                    
+//              //USER goes first
+//              String sql = "CREATE TABLE USER (";
+//              sql = sql + " USERNAME VARCHAR(30) PRIMARY KEY,";
+//              sql = sql + " PASSWORD VARCHAR(20),";
+//              sql = sql + " ADMIN BOOLEAN,";
+//              sql = sql + " NAME VARCHAR(50),";
+//              sql = sql + " EMAIL VARCHAR(50))";
+
                     String userName = lineScanner.next().trim();
                     String password = lineScanner.next().trim();
                     String admin = lineScanner.next().trim();
