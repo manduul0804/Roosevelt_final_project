@@ -1,0 +1,6 @@
+Tom Tom 0 Mr.Tom	tom@mail.roosevelt.edu
+Manduul Manduul 0 Mr.Manduul manduul@mail.roosevelt.edu
+Hassan Hassan 0 Mr.Hassan hassan@mail.roosevelt.edu
+Jesus Jesus 0 Mr.Jesus jesus@mail.roosevelt.edu
+Jose Jose 0 Mr.Jos jose@mail.roosevelt.edu
+Karen Karen 0 Ms.Karen karen@mail.roosevelt.edu
