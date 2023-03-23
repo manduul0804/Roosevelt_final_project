@@ -75,7 +75,7 @@ group admin FK
             //GROUP goes next
             String sql = "CREATE TABLE PICKEMGROUP (";
             sql = sql + "NAME VARCHAR(25) PRIMARY KEY,";
-            sql = sql + " TYPE VARCHAR(3),";
+            sql = sql + " TYPE VARCHAR(4),";
             sql = sql + " ADMIN VARCHAR(50),";
             sql = sql + " FOREIGN KEY (ADMIN) REFERENCES USER(USERNAME))";
             //admin must be a real user
