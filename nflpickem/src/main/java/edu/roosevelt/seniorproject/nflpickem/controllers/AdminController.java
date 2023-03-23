@@ -7,7 +7,6 @@ package edu.roosevelt.seniorproject.nflpickem.controllers;
 import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
-import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository.HighScore;
 import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
 import edu.roosevelt.seniorproject.nflpickem.pick.Pick;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
@@ -71,7 +70,7 @@ public class AdminController {
     PickRepository picks;
 
     @GetMapping("/nflpickem/admin/numpicks/byweek/{week}")
-    public ResponseEntity<Long> getPicksByweek(@PathVariable("week") int week, HttpSession session) {
+    public ResponseEntity<List<Pick>> getPicksByweek(@PathVariable("week") int week, HttpSession session) {
         if (this.isAdmin(session)) {
             return new ResponseEntity(picks.countByWeek(week), HttpStatus.OK);
         } else {
@@ -116,7 +115,23 @@ public class AdminController {
         }
     }
 
-   
+    @GetMapping("/nflpickem/admin/{group}")
+    public ResponseEntity<List<Game>> getGroupLeaderboard(@PathVariable("group") String group, HttpSession session) {
+        if (isLoggedIn(session)) {
+            String username = (String) session.getAttribute("user");
+            if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
+                List<PickemGroupUser> standings = groupusers.findByGrpname(group);
+                return new ResponseEntity(standings, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+    }
+    
+    
+
+    
+     
+
     @GetMapping("/nflpickem/admin/allstandings")
     public ResponseEntity<List<PickemGroupUser>> getAllGroupUser(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -127,19 +142,8 @@ public class AdminController {
     }
 
     @GetMapping("/nflpickem/admin/highscores")
-    public ResponseEntity<List<HighScore>> getHighScoresForGroup(HttpSession session) {
+    public ResponseEntity<List<PickemGroupUser>> getHighScoresForGroup(HttpSession session) {
         if (isLoggedIn(session)) {
-//            List<HighScore> scores = groups.getHighScoresForEachGroupType();
-//            for (HighScore score: scores) {
-//                logger.info("Score:");
-//                logger.info(score.getUserName());
-//                logger.info(score.getType());
-//                logger.info("" + score.getScore() );
-//            }
-            
-        
-            
-            
             return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
