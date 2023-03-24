@@ -52,18 +52,6 @@ public class PickController {
     @Autowired
     PickRepository picks;
 
-    //checking if session is good
-    @GetMapping("/nflpickem/picks")
-    public String testGroups(HttpSession session) {
-        if (session != null && session.getAttribute("user") != null) {
-            return (String) session.getAttribute("groupusers");
-
-        } else if (session != null) {
-            return "good session, no att";
-        } else {
-            return "no session";
-        }
-    }
 
     //checking if user is logged in
     private boolean isLoggedIn(HttpSession session) {
