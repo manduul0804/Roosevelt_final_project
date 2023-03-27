@@ -7,18 +7,17 @@ package edu.roosevelt.seniorproject.nflpickem.controllers;
 import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository;
-import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
 import edu.roosevelt.seniorproject.nflpickem.groups.PickemGroupRepository.HighScore;
+import edu.roosevelt.seniorproject.nflpickem.pick.PickRepository;
+import edu.roosevelt.seniorproject.nflpickem.pick.Pick;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUser;
 import edu.roosevelt.seniorproject.nflpickem.pickemgroupuser.PickemGroupUserRepository;
-import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -71,7 +70,29 @@ public class AdminController {
     @Autowired
     PickRepository picks;
 
-    //OMAR NAVARRO -MR
+    @GetMapping("/nflpickem/admin/numpicks/byweek/{week}")
+    public ResponseEntity<Long> getPicksByweek(@PathVariable("week") int week, HttpSession session) {
+        if (this.isAdmin(session)) {
+            return new ResponseEntity(picks.countByWeek(week), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    
+    @GetMapping("/nflpickem/admin/numusers")
+    public ResponseEntity<Long> getTotalNumberOfUsers(HttpSession session) {
+        if (this.isAdmin(session)) {
+
+            return new ResponseEntity(users.count(), HttpStatus.UNAUTHORIZED);
+
+        } else {
+            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    
+    
     @GetMapping("/nflpickem/admin/numpicks")
     public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -82,42 +103,43 @@ public class AdminController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-
-    @GetMapping("/nflpickem/admin/{group}")
-    public ResponseEntity<List<Game>> getGroupLeaderboard(@PathVariable("group") String group, HttpSession session) {
-        if (isLoggedIn(session)) {
-            String username = (String) session.getAttribute("user");
-            if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
-                List<PickemGroupUser> standings = groupusers.findByGrpname(group);
-                return new ResponseEntity(standings, HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-    }
-
-    @GetMapping("/nflpickem/users/allgroups")
-    public ResponseEntity<List<User>> getAllgroups(HttpSession session) {
-
+    
+    
+    @GetMapping("/nflpickem/admin/numgroups")
+    public ResponseEntity<Long> getTotalNumberOfGroups(HttpSession session) {
         if (this.isAdmin(session)) {
-            return new ResponseEntity(users.findAll(), HttpStatus.OK);
+
+            return new ResponseEntity(groups.count(), HttpStatus.UNAUTHORIZED);
+
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-
     }
 
-    @GetMapping("/nflpickem/users/standingpicks")
+   
+    @GetMapping("/nflpickem/admin/allstandings")
     public ResponseEntity<List<PickemGroupUser>> getAllGroupUser(HttpSession session) {
         if (this.isAdmin(session)) {
-            return new ResponseEntity(groupusers.findAllUserGroupSorted(), HttpStatus.OK);
+            return new ResponseEntity(groupusers.findByStatusOrderByGrpnameAscScoreDesc("OK"), HttpStatus.OK);
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
 
-    @GetMapping("/nflpickem/groups/highscores")
-    public ResponseEntity<List<PickemGroupUser>> getHighScoresForGroup(HttpSession session) {
+    @GetMapping("/nflpickem/admin/highscores")
+    public ResponseEntity<List<HighScore>> getHighScoresForGroup(HttpSession session) {
         if (isLoggedIn(session)) {
+//            List<HighScore> scores = groups.getHighScoresForEachGroupType();
+//            for (HighScore score: scores) {
+//                logger.info("Score:");
+//                logger.info(score.getUserName());
+//                logger.info(score.getType());
+//                logger.info("" + score.getScore() );
+//            }
+            
+        
+            
+            
             return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);

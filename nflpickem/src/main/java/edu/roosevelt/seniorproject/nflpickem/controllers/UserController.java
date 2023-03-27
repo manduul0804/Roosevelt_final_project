@@ -8,7 +8,6 @@ import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
@@ -43,18 +42,6 @@ public class UserController {
     
     @Autowired
     GameRepository games;
-
-    @GetMapping("/home")
-    public String testHome(HttpSession session) {
-        if (session != null && session.getAttribute("user") != null) {
-            return (String) session.getAttribute("user");
-
-        } else if (session != null) {
-            return "good session, no att";
-        } else {
-            return "no session";
-        }
-    }
 
     //simplifying code bit by bit
     private boolean isLoggedIn(HttpSession session) {
@@ -99,7 +86,7 @@ public class UserController {
         return new ResponseEntity(user, HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/nflpickem/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> insertUser(@RequestBody final User u, HttpSession session) {
         if (users.existsById(u.getUsername())) {
             //If user exists
@@ -121,26 +108,18 @@ public class UserController {
                     Optional<User> opt = users.findById(username);
                     if (opt.isPresent()) {
                         User user = opt.get();
-                        user.setEmail("mruth@roosevelt.edu");
-                        users.save(user);
-
                         return new ResponseEntity(user, HttpStatus.OK);
-
                     }
+                } else {
+                    return new ResponseEntity(null, HttpStatus.NOT_FOUND);
                 }
-                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-
-            } else {
-                return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
             }
-
-        } else {
-            return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
 
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/nflpickem/users/allusers")
+    @GetMapping("/nflpickem/user/allusers")
     public ResponseEntity<List<User>> getAllUsers(HttpSession session) {
 
         if (this.isAdmin(session)) {
@@ -151,14 +130,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/nflpickem/users/allusers2")
-    public ResponseEntity<List<User>> getAllUsers2(HttpSession session) {
-
-        return new ResponseEntity(users.findAll(), HttpStatus.OK);
-
-    }
-
-    @DeleteMapping("/nflpickem/users/{username}")
+    @DeleteMapping("/nflpickem/user/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username, HttpSession session) {
         //if admin
         if (this.isAdmin(session)) {
@@ -185,7 +157,7 @@ public class UserController {
         return "OK";
     }
 
-    @PutMapping(value = "/nflpickem/users", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/nflpickem/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@RequestBody final User u, HttpSession session) throws SQLException {
         // Checks if the user is logged in
         if (this.isLoggedIn(session)) {

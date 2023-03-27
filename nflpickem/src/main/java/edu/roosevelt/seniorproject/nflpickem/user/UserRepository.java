@@ -5,6 +5,8 @@
 package edu.roosevelt.seniorproject.nflpickem.user;
 
 import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  *
@@ -16,4 +18,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     //review
     //https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
+    
+    
 }

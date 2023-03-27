@@ -22,6 +22,8 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
     PickemGroupUser findByUsernameAndGrpname(String user, String group);
 
     List<PickemGroupUser> findByGrpname(String group);
+    
+    void deleteByGrpname(String groupname);
 
     List<PickemGroupUser> findByUsername(String username);
 
@@ -61,29 +63,12 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
             nativeQuery = true)
     void updateScoreForSURVSelectionsLoss(String sel, int gameid);
 
-    //Return all users sorted by group name first and then by score in descending order
-    @Transactional
-    @Query(value = "SELECT * "
-            + "FROM pickemgroupuser "
-            + "WHERE STATUS = 'standing' and "
-            + "EXISTS (SELECT * "
-            + "FROM pickemgroup "
-            + "WHERE pickemgroupuser.GRPNAME = pickemgroup.NAME) "
-            + "ORDER BY GRPNAME, SCORE DESC", nativeQuery = true)
-    List<StandingPicks> findAllUserGroupSorted();
     
-    //This class added only to show the necassary data from the database
-    //When I used List<PickemGroupUser> in findAllUserGroupSorted() function
-    //in postman I was getting 3 additional data that is not in the 
-    //pickemgroupuser data table.
-    //The additional datas were: isMember, isLeader, and isAdmin
-    public interface StandingPicks{
-        public int getGuid();
-        public String getUsername();
-        public String getGrpname();
-        public String getStatus();
-        public int getScore();
-        public boolean getDone();
-    }
+    
+    List<PickemGroupUser> findByStatusOrderByGrpnameAscScoreDesc(String status);
+    
+    
+    
+    
 
 }

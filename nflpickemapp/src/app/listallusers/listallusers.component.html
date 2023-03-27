@@ -1,0 +1,24 @@
+<h1>All Users</h1>
+
+<ol>
+    <li *ngFor="let user of users">{{user.username}}</li>
+</ol>
+
+<p></p>
+
+<table cellpadding="5" cellspacing="0" border="1">
+    <tr>
+        <td><b>Username</b></td>
+        <td><b>Password</b></td>
+        <td><b>Admin?</b></td>
+        <td><b>Name</b></td>
+        <td><b>Email</b></td>
+    </tr>
+    <tr *ngFor="let user of users">
+        <td><b>{{user.username}}</b></td>
+        <td><b>{{user.password}}</b></td>
+        <td><b>{{user.admin}}</b></td>
+        <td><b>{{user.name}}</b></td>
+        <td><b>{{user.email}}</b></td>
+    </tr>
+</table>

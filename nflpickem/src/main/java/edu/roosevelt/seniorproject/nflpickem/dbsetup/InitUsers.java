@@ -4,10 +4,12 @@
  */
 package edu.roosevelt.seniorproject.nflpickem.dbsetup;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Scanner;
 
 /**
  *
@@ -21,6 +23,7 @@ public class InitUsers {
     public static void main(String[] args) {
         // TODO code application logic here
         try {
+
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
                     "user", "user");
@@ -71,27 +74,6 @@ public class InitUsers {
             System.out.println("oops:" + e);
         }
 
-        // as admin, see how many users there are
-        try {
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/nflpickem",
-                    "user", "user");
-
-            String sql = "SELECT count(USERNAME) FROM user WHERE admin = 0";
-
-            try {
-                Statement cursor = conn.createStatement();
-                ResultSet rSet = cursor.executeQuery(sql);
-                System.out.println("Number of users: " + rSet.getString(1));
-            } catch (Exception error) {
-                System.out.println(error.getMessage());
-            } finally {
-                conn.close();
-            }
-
-        } catch (Exception error) {
-            System.out.println(error.getMessage());
-        }
     }
 
 }

@@ -7,13 +7,10 @@ package edu.roosevelt.seniorproject.nflpickem.dbsetup;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 /**
@@ -55,7 +52,7 @@ public class InitGame {
 
                 //System.out.println(team1Name + " (" + team1SN + ") vs " + team2Name + " (" + team2SN + ")");
                 //timestamp set for noon on 9/11
-                Timestamp ts = Timestamp.valueOf("2022-09-11 12:00:00.000");
+                Timestamp ts = Timestamp.valueOf("2023-09-11 12:00:00.000");
                 String teamRec = "0-0";
                 int week = 1;
 
