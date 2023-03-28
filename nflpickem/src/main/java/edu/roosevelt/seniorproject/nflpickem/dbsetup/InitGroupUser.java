@@ -116,7 +116,7 @@ public class InitGroupUser {
                     sql = sql + "'doesnt matter',";
                     sql = sql + "0,false)";
                     k++;
-                    System.out.println( sql);
+                    System.out.println(sql);
                     try {
                         conn.createStatement().execute(sql);
 

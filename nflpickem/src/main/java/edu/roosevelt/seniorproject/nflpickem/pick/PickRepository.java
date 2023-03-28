@@ -25,11 +25,11 @@ public interface PickRepository extends CrudRepository<Pick, String> {
 
 //>>>>>>> main
     public Iterable<Pick> findByUsername(String username);
-    
+
     boolean existsByUsernameAndGrpname(String username, String grpname);
-    
+
     boolean existsByUsernameAndGrpnameAndGameid(String username, String grpname, int gameid);
-    
+
     Pick findByUsernameAndGrpnameAndGameid(String username, String grpname, int gameid);
 
 }
