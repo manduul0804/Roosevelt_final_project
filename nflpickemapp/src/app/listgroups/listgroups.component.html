@@ -1,1 +1,23 @@
-<p>listgroups works!</p>
+<h1>All Groups</h1>
+
+<h3 *ngIf="unauth">You're not cool enough to look at this list sorry</h3>
+
+
+<ol *ngIf="!unauth">
+    <li *ngFor="let group of groups">{{group.name}}</li>
+</ol>
+
+<p></p>
+
+<table cellpadding="5" cellspacing="0" border="1" *ngIf="!unauth">
+    <tr>
+        <td><b>Admin?</b></td>
+        <td><b>Name</b></td>
+        <td><b>Type</b></td>
+    </tr>
+    <tr *ngFor="let group of groups">
+        <td><b>{{group.admin}}</b></td>
+        <td><b>{{group.name}}</b></td>
+        <td><b>{{group.type}}</b></td>
+    </tr>
+</table>
