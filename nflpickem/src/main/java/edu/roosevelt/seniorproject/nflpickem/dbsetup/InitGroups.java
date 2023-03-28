@@ -31,7 +31,6 @@ public class InitGroups {
 
             System.out.println("Create GROUP (not base - depends on user)");
 
-//            String[] uns = {"admin", "red", "blue", "green", "yellow"};
             String[] grps = {"bronze", "gold", "silver", "diamond", "platinum",
                 "copper", "nickel", "titanium", "iron", "cobalt", "tungsten", "mercury"};
 
@@ -40,9 +39,9 @@ public class InitGroups {
 //            sql = sql + " TYPE VARCHAR(3),";
 //            sql = sql + " ADMIN VARCHAR(50),";
 //            sql = sql + " FOREIGN KEY (ADMIN) REFERENCES USER(USERNAME))";
+// **********************Manduul Code********************************
+// **************************START***********************************
             String sql1 = "SELECT username FROM USER";
-                    
-
             //Create a names list to store names from USER table from DB
             List<String> names = new ArrayList();
             try {
@@ -63,11 +62,11 @@ public class InitGroups {
 
             for (int i = 0; i < grps.length; i++) {
                 String type = new String();
-                if ((grps[i] == "diamond") || (grps[i] == "copper") || 
-                        (grps[i] == "platinum") || (grps[i] == "nickel")) {
+                if ((grps[i] == "diamond") || (grps[i] == "copper")
+                        || (grps[i] == "platinum") || (grps[i] == "nickel")) {
                     type = "ATS";
-                } else if ((grps[i] == "titanium") || (grps[i] == "iron") || 
-                        (grps[i] == "cobalt") || (grps[i] == "tungsten")) {
+                } else if ((grps[i] == "titanium") || (grps[i] == "iron")
+                        || (grps[i] == "cobalt") || (grps[i] == "tungsten")) {
                     type = "SURV";
                 } else {
                     type = "SU";
@@ -75,7 +74,7 @@ public class InitGroups {
                 String sql = "INSERT INTO PICKEMGROUP VALUES ('";
                 sql = sql + grps[i] + "','" + type + "',";
                 sql = sql + "'" + names.get(i + 1) + "')";
-
+// **************************END*********************************** 
                 System.out.println(sql);
 
                 try {
