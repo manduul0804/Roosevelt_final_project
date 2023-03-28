@@ -1,1 +1,33 @@
-<p>register works!</p>
+<h1>Register new user</h1>
+
+<form (ngSubmit)="onSubmit()" novalidate #myform="ngForm">
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tr *ngIf="nameinuse">
+            <td colspan="2">
+                <span style="color:red">Username already in use, try another one</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Username:</td>
+            <td><input type="text" name="username" required [(ngModel)]="user.username" #username="ngModel"></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" name="password" required [(ngModel)]="user.password" #password="ngModel"></td>
+        </tr>
+
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" name="name" required [(ngModel)]="user.name" #name="ngModel"></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="email" name="email" required [(ngModel)]="user.email" #email="ngModel"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" [disabled]="!myform.form.valid" value="Register">
+                <input type="reset" value="Start Over"></td>
+
+        </tr>
+    </table>
+</form>

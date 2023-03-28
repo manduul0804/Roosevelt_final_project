@@ -1,12 +1,15 @@
 <h1>All Users</h1>
 
-<ol>
+<h3 *ngIf="unauth">You are not authorized to see this bub!</h3>
+
+
+<ol *ngIf="!unauth">
     <li *ngFor="let user of users">{{user.username}}</li>
 </ol>
 
 <p></p>
 
-<table cellpadding="5" cellspacing="0" border="1">
+<table cellpadding="5" cellspacing="0" border="1" *ngIf="!unauth">
     <tr>
         <td><b>Username</b></td>
         <td><b>Password</b></td>

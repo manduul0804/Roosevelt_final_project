@@ -142,7 +142,7 @@ public class GameController {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         //get games listed ordered by kickoff
         logger.info("Time: " + now);
-        Game g = games.findFirstByKickoffAfterOrderByKickoff(now);
+        Game g = games.findFirstByKickoffAfterOrderByKickoffDesc(now);
         
         return new ResponseEntity(g.getKickoff(), HttpStatus.UNAUTHORIZED);
         

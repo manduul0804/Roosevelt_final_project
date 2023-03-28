@@ -10,13 +10,25 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ListallusersComponent } from './listallusers/listallusers.component';
 import { FormsModule } from '@angular/forms';
+import { ListgroupsComponent } from './listgroups/listgroups.component';
+import { ListgamesbyweekComponent } from './listgamesbyweek/listgamesbyweek.component';
+import { ListmygroupsComponent } from './listmygroups/listmygroups.component';
+import { ListmygroupsinvitedComponent } from './listmygroupsinvited/listmygroupsinvited.component';
+import { ListmygroupleadersComponent } from './listmygroupleaders/listmygroupleaders.component';
+import { ListhighscoresbygrouptypeComponent } from './listhighscoresbygrouptype/listhighscoresbygrouptype.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ListallusersComponent
+    ListallusersComponent,
+    ListgroupsComponent,
+    ListgamesbyweekComponent,
+    ListmygroupsComponent,
+    ListmygroupsinvitedComponent,
+    ListmygroupleadersComponent,
+    ListhighscoresbygrouptypeComponent
   ],
   imports: [
     BrowserModule,

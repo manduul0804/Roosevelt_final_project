@@ -17,7 +17,7 @@ export class ListallusersComponent {
   constructor(private router: Router, private userservice: UserService, private titleService: Title) { }
 
 
-  
+  unauth: boolean = false;
 
   ngOnInit(): void {
     this.titleService.setTitle("All Users");
@@ -27,7 +27,13 @@ export class ListallusersComponent {
           this.users = data;
         }, error => {
           console.log(error.status);
-          this.router.navigateByUrl("/");
+          if (error.status == '401') {
+            this.unauth = true;
+          } else {
+            this.router.navigateByUrl("/");
+          }
+         
+          
         }
     );
    
