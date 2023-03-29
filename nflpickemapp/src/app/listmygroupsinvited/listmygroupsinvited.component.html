@@ -1,1 +1,23 @@
-<p>listmygroupsinvited works!</p>
+<h1>All Groups Invited</h1>
+
+<h2 *ngIf="unauth">Can't be seen. Sorry!</h2>
+
+
+<ol *ngIf="!unauth">
+    <li *ngFor="let group of groups">{{group.name}}</li>
+</ol>
+
+<p></p>
+
+<table cellpadding="5" cellspacing="0" border="1" *ngIf="!unauth">
+    <tr>
+        <td><b>Admin?</b></td>
+        <td><b>Group Name</b></td>
+        <td><b>Group Type</b></td>
+    </tr>
+    <tr *ngFor="let group of groups">
+        <td><b>{{group.admin}}</b></td>
+        <td><b>{{group.name}}</b></td>
+        <td><b>{{group.type}}</b></td>
+    </tr>
+</table>
