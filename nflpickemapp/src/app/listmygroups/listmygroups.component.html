@@ -2,11 +2,6 @@
 
 <h3 *ngIf="unauth">Unauthorized, go back now.</h3>
 
-<ol *ngIf="!unauth">
-    <li *ngFor="let Groups of Groups">{{Groups.name}}</li>
-</ol>
-
-<p></p>
 
 <table cellpadding="5" cellspacing="0" border="1" *ngIf="!unauth">
     <tr> 
@@ -14,8 +9,8 @@
         <td><b>Groupname</b></td>        
     </tr>
 
-    <tr *ngFor="let Groups of Groups">
-        <td><b>{{groupuser.username}}</b></td>
-        <td><b>{{groupuser.Groupname}}</b></td>
+    <tr *ngFor="let user of groupusers">
+        <td><b>{{groupusers.username}}</b></td>
+        <td><b>{{groupusers.grpname}}</b></td>
     </tr>
 </table>
