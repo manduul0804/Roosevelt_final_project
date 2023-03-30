@@ -29,8 +29,6 @@ public class InitGroups {
                     "jdbc:mysql://localhost:3306/nflpickem",
                     "user", "user");
 
-            System.out.println("Create GROUP (not base - depends on user)");
-
             String[] grps = {"bronze", "gold", "silver", "diamond", "platinum",
                 "copper", "nickel", "titanium", "iron", "cobalt", "tungsten", "mercury"};
 
@@ -39,8 +37,11 @@ public class InitGroups {
 //            sql = sql + " TYPE VARCHAR(3),";
 //            sql = sql + " ADMIN VARCHAR(50),";
 //            sql = sql + " FOREIGN KEY (ADMIN) REFERENCES USER(USERNAME))";
-// **********************Manduul Code********************************
-// **************************START***********************************
+/* **********************Manduul Code********************************
+   **************************START***********************************
+Task: Add more groups (you'll want 4 or so groups for each type -> SU, ATS, SURV)
+Operation: It selects username from the USER table
+             */
             String sql1 = "SELECT username FROM USER";
             //Create a names list to store names from USER table from DB
             List<String> names = new ArrayList();
