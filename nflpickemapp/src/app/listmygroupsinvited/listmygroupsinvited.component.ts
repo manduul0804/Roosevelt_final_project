@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Group } from '../group';
+import { Groupuser } from '../groupuser';
 import { PickemgroupService } from '../pickemgroup.service';
 
 @Component({
@@ -11,18 +11,18 @@ import { PickemgroupService } from '../pickemgroup.service';
 })
 export class ListmygroupsinvitedComponent {
 
-  groups: Group[]
+  groupusers: Groupuser[]
 
-  constructor(private router: Router, private pickemgroupService: PickemgroupService, private titleService: Title) { }
+  constructor(private router: Router, private pickemgroupservice: PickemgroupService, private titleService: Title) { }
 
   unauth: boolean = false;
 
   ngOnInit(): void {
     this.titleService.setTitle("All Groups Invited");
 
-    this.pickemgroupService.getAllGroupsInvited().subscribe(
+    this.pickemgroupservice.getAllGroupsInvited().subscribe(
       data => {
-        this.groups = data;
+        this.groupusers = data;
       }, error => {
         console.log(error.status);
         if (error.status == '401') {

@@ -14,24 +14,24 @@ export class PickemgroupService {
   constructor(private http: HttpClient) { }
 
 
-  public createGroup(group: Group): Observable<any> {  
+  public createGroup(group: Group): Observable<any> {
     return this.http.post<string>(this.groupsURL + "/create", group);
   }
 
-  public joinGroupForUser(group: string, username: string): Observable<any> {  
+  public joinGroupForUser(group: string, username: string): Observable<any> {
     return this.http.get<Group>(this.groupsURL + "/" + username + "/join/" + group);
 
   }
 
-  public joinGroup(group: string): Observable<any> {  
+  public joinGroup(group: string): Observable<any> {
     return this.http.get<Group>(this.groupsURL + "/join/" + group);
   }
 
-  public declineGroupInvitation(group: string): Observable<any> {  
+  public declineGroupInvitation(group: string): Observable<any> {
     return this.http.delete<Group>(this.groupsURL + "/decline/" + group);
   }
 
-  public declineGroupInvitationForUser(group: string, username: string): Observable<any> {  
+  public declineGroupInvitationForUser(group: string, username: string): Observable<any> {
     return this.http.delete<Group>(this.groupsURL + "/" + username + "/decline/" + group);
   }
 
@@ -56,7 +56,7 @@ export class PickemgroupService {
   }
 
   public getAllGroupsInvited(): Observable<any> {
-    return this.http.get<Groupuser[]>(this.groupsURL + "//byinvite");
+    return this.http.get<Groupuser[]>(this.groupsURL + "/byinvite");
   }
 
   public deleteGroup(group: string): Observable<any> {
