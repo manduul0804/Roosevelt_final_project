@@ -41,8 +41,12 @@ public class InitGroupUser {
 //            //now we need to enforce referential integrity
 //            sql = sql + " FOREIGN KEY (USERNAME) REFERENCES USER(USERNAME),";
 //            sql = sql + " FOREIGN KEY (GRPNAME) REFERENCES PICKEMGROUP(NAME))";
-// **********************Manduul Code********************************
-// **************************START***********************************
+/* **********************Manduul Code********************************
+ **************************START***********************************
+    Task: Add users to these groups -> here's where it gets a bit tricky: you 
+          want 4 users in multiple groups, 4 users in no groups, and the rest 
+          in one group.
+*/
             //Empty list to store group names from pickemgroup table
             List<String> grpNames = new ArrayList();
 

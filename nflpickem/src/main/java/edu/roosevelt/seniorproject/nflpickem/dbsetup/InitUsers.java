@@ -23,18 +23,22 @@ public class InitUsers {
     public static void main(String[] args) {
         // TODO code application logic here
         try {
-            Scanner scanner = new Scanner(new File("users.txt"));
+
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
                     "user", "user");
-
+/* **********************Manduul Code********************************
+ **************************START***********************************
+                Task: Add more users (approximately 16 or so)
+                It takes users from users.txt file
+*/
+            Scanner scanner = new Scanner(new File("users.txt"));
             System.out.println("Create USER/GAME (bases)");
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-//                System.out.println("line: " + line);
+
                 Scanner lineScanner = new Scanner(line);
-// **********************Manduul Code********************************
-// **************************START***********************************
+
                 //Get data line by line and seperate it by ws
                 while (lineScanner.hasNext()) {
 

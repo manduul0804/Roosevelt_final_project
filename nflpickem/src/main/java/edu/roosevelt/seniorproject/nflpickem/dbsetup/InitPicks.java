@@ -6,6 +6,10 @@ package edu.roosevelt.seniorproject.nflpickem.dbsetup;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -33,35 +37,53 @@ public class InitPicks {
 //            sql = sql + " GAMEID INTEGER,";
 //            sql = sql + " SELECTION VARCHAR(30),";
 
-            int gameID = 10000;
+//            int gameID = 10000;
             int pid = 10000;
+            
+            String sql1 = "SELECT username FROM USER";
+            //Create a names list to store names from USER table from DB
+            List<String> names = new ArrayList();
+            try {
+                Statement st = conn.createStatement();
 
-            for (int i = 0; i < users.length; i++) {
-                for (int y = 0; y < 3; y++) {
-                    String sql = "INSERT INTO PICKS VALUES (";
-                    sql = sql + ++pid + ",";
-                    sql = sql + "'" + users[i] + "',";
-                    sql = sql + "'" + grps[i] + "',";
-                    sql = sql + "" + ++gameID + ",";
-                    sql = sql + "" + 1 + ",";
-                    if (y == 0) {
-                        sql = sql + "'NO')";
-                    } else {
-                        sql = sql + "'ATL')";
-                    }
+                // execute the query, and get a java resultset
+                ResultSet rs = st.executeQuery(sql1);
 
-                    System.out.println(sql);
-
-                    try {
-                        conn.createStatement().execute(sql);
-
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-
+                while (rs.next()) {
+                    String userName = rs.getString(1);
+                    names.add(userName);
                 }
 
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
+
+//            for (int i = 0; i < users.length; i++) {
+//                for (int y = 0; y < 3; y++) {
+//                    String sql = "INSERT INTO PICKS VALUES (";
+//                    sql = sql + ++pid + ",";
+//                    sql = sql + "'" + users[i] + "',";
+//                    sql = sql + "'" + grps[i] + "',";
+//                    sql = sql + "" + ++gameID + ",";
+//                    sql = sql + "" + 1 + ",";
+//                    if (y == 0) {
+//                        sql = sql + "'NO')";
+//                    } else {
+//                        sql = sql + "'ATL')";
+//                    }
+//
+//                    System.out.println(sql);
+//
+//                    try {
+//                        conn.createStatement().execute(sql);
+//
+//                    } catch (Exception e) {
+//                        System.out.println(e.getMessage());
+//                    }
+//
+//                }
+//
+//            }
 
             System.out.println("Table USER created!");
         } catch (Exception e) {
