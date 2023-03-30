@@ -38,4 +38,9 @@ export class AdminService {
     return this.http.get<HighScore[]>(this.adminURL + "/highscores");
   }
 
+ //Aaron's code 
+  public getHighScoresByGroupType(): Observable<any>{
+    return this.http.get<HighScore[]>(this.adminURL + "/highscores/group-type")
+  }
+
 }
