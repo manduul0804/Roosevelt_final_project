@@ -1,1 +1,23 @@
 <p>listmygroupleaders works!</p>
+<h1>Group Leaderboard</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>User</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of groupLeaderboard; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.score }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="unauth">
+  <p>You are not authorized to view this page.</p>
+</div>
