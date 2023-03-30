@@ -14,8 +14,3 @@ Las Vegas Raiders, LV, Los Angelos Chargers, LAC, 0-0, 0-0, 2022-09-11 12:00:00
 Green Bay Packers, GB, Minnesota Vikings, MIN, 0-0, 0-0, 2022-09-11 12:00:00
 Tampa Bay Buccaneers, TB, Dallas Cowboys, DAL, 0-0, 0-0, 2022-09-11 12:00:00
 Denver Broncos, DEN, Seattle Seahawks, SEA, 0-0, 0-0, 2022-09-11 12:00:00
-
-
-
-
-
