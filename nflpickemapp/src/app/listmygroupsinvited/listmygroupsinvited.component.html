@@ -1,1 +1,15 @@
-<p>listmygroupsinvited works!</p>
+<h1>All Groups Invited</h1>
+
+<h3 *ngIf="unauth">Can't be seen. Sorry!</h3>
+
+
+
+<table cellpadding="5" cellspacing="0" border="1" *ngIf="!unauth">
+    <tr>
+        <td><b>Group Name</b></td>
+    </tr>
+    <tr *ngFor="let groupuser of groupusers">
+        <td><b>{{groupuser.grpname}}</b></td>
+
+    </tr>
+</table>
