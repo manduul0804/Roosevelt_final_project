@@ -246,8 +246,7 @@ public class PickemGroupController {
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
-    
-    
+
     //Invite given group/username
     @GetMapping(value = "/nflpickem/groups/{user}/isinvitedto/{group}")
     public ResponseEntity<PickemGroupUser> inviteUserToGroup(@PathVariable("user") final String user, @PathVariable("group") final String group, HttpSession session) {
@@ -286,20 +285,18 @@ public class PickemGroupController {
                             //do nothing...
                         }
                     }
-                    
+
                     return new ResponseEntity(invite, HttpStatus.OK);
-                } 
+                }
             }
-            
+
         }
 
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
 
-    
     // view all groups as an admin
-
     @GetMapping("/nflpickem/groups/allgroups")
     public ResponseEntity<List<PickemGroup>> getAllGroups(HttpSession session) {
 
@@ -377,7 +374,6 @@ public class PickemGroupController {
 
 //base url for all requests should be:
 // -> /nflpickem/groups 
-    
     //get all groups i've been invited to
     @GetMapping("/nflpickem/groups/byinvite")
     public ResponseEntity<List<PickemGroupUser>> getGroupsByInvite(HttpSession session) {
@@ -410,7 +406,7 @@ public class PickemGroupController {
                     //delete the group
                     groups.delete(grp);
                     return new ResponseEntity(groupname, HttpStatus.OK);
-                    
+
                 } else {
                     return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
                 }

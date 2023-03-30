@@ -78,8 +78,7 @@ public class AdminController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
-    
+
     @GetMapping("/nflpickem/admin/numusers")
     public ResponseEntity<Long> getTotalNumberOfUsers(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -90,9 +89,7 @@ public class AdminController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
-    
-    
+
     @GetMapping("/nflpickem/admin/numpicks")
     public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -103,8 +100,7 @@ public class AdminController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
-    
+
     @GetMapping("/nflpickem/admin/numgroups")
     public ResponseEntity<Long> getTotalNumberOfGroups(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -116,7 +112,6 @@ public class AdminController {
         }
     }
 
-   
     @GetMapping("/nflpickem/admin/allstandings")
     public ResponseEntity<List<PickemGroupUser>> getAllGroupUser(HttpSession session) {
         if (this.isAdmin(session)) {
@@ -136,10 +131,7 @@ public class AdminController {
 //                logger.info(score.getType());
 //                logger.info("" + score.getScore() );
 //            }
-            
-        
-            
-            
+
             return new ResponseEntity(groups.getHighScoresForEachGroupType(), HttpStatus.OK);
         }
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);

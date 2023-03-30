@@ -52,7 +52,6 @@ public class PickController {
     @Autowired
     PickRepository picks;
 
-
     //checking if user is logged in
     private boolean isLoggedIn(HttpSession session) {
         if (session.getAttribute("user") != null) {
@@ -73,18 +72,18 @@ public class PickController {
         }
         return false;
     }
-    
+
     //checking if user is admin
     private String getUsername(HttpSession session) {
-        
-        return (String)session.getAttribute("user");
-        
+
+        return (String) session.getAttribute("user");
+
     }
-    
+
     //get num of missing picks by week, group, user
     @GetMapping("/nflpickem/picks/missing/{username}/group/{group}/week/{week}")
-    public ResponseEntity<Long> getNumberOfMissingPicks(@PathVariable("username") String username,@PathVariable("group") String grp, @PathVariable("week") int week, HttpSession session) { 
-        
+    public ResponseEntity<Long> getNumberOfMissingPicks(@PathVariable("username") String username, @PathVariable("group") String grp, @PathVariable("week") int week, HttpSession session) {
+
         if (this.isLoggedIn(session)) {
             //get the username
             String user = this.getUsername(session);
@@ -95,21 +94,19 @@ public class PickController {
                 //get games
                 int nogames = games.countByWeek(week);
                 //return the difference
-                return new ResponseEntity(nogames-picksin, HttpStatus.OK);
-                
+                return new ResponseEntity(nogames - picksin, HttpStatus.OK);
+
             }
         }
 
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
-        
     }
-    
 
     //get picks by week, group, user
     @GetMapping("/nflpickem/picks/{username}/group/{group}/week/{week}")
-    public ResponseEntity<List<Pick>> getByUsername(@PathVariable("username") String username,@PathVariable("group") String grp, @PathVariable("week") int week, HttpSession session) {
-    
+    public ResponseEntity<List<Pick>> getByUsername(@PathVariable("username") String username, @PathVariable("group") String grp, @PathVariable("week") int week, HttpSession session) {
+
         if (this.isLoggedIn(session)) {
             //get the username of the user logged in
             String myusername = this.getUsername(session);
@@ -117,23 +114,21 @@ public class PickController {
                 //is the user in the group in question?
                 if (groupusers.existsByUsernameAndGrpname(username, grp)) {
                     //if so, go get the picks
-                    return new ResponseEntity(picks.findByUsernameAndGrpnameAndWeek(username, grp, week), HttpStatus.UNAUTHORIZED);                    
+                    return new ResponseEntity(picks.findByUsernameAndGrpnameAndWeek(username, grp, week), HttpStatus.UNAUTHORIZED);
                 } else {
                     return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
                 }
-                
-                
+
             } else {
                 return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
             }
-            
-            
+
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
-        
+
     }
-    
+
     //make picks 
     @PutMapping(value = "/nflpickem/picks/makepicks", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Pick>> makePicks(@RequestBody final List<Pick> mypicks, HttpSession session) {
@@ -184,15 +179,7 @@ public class PickController {
         }
     }
 
-    
-    
-    
-    
-    
-    
-   
 }
-
 
 ////    //base url for all requests should be:
 ////    // -> /nflpickem/picks

@@ -77,7 +77,7 @@ public class GameController {
 
     @Autowired
     PickRepository picks;
-    
+
     //create games
     @PostMapping(value = "/nflpickem/games", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Game> createGame(@RequestBody Game g, HttpSession session) throws SQLException {
@@ -96,7 +96,7 @@ public class GameController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
-    
+
     //Just a general get all games 
     @GetMapping("/nflpickem/games/allgames")
     public ResponseEntity<List<Game>> getAllGames(HttpSession session) {
@@ -134,7 +134,7 @@ public class GameController {
         }
 
     }
-    
+
     //get the timestamp of the next kickoff
     @GetMapping("/nflpickem/games/nextkickoff")
     public ResponseEntity<Timestamp> getNextKickoff() {
@@ -145,7 +145,7 @@ public class GameController {
         Game g = games.findFirstByKickoffAfterOrderByKickoffDesc(now);
         
         return new ResponseEntity(g.getKickoff(), HttpStatus.UNAUTHORIZED);
-        
+
     }
 
     //update games score for team 1
@@ -206,7 +206,6 @@ public class GameController {
         //update query for updating scores based on winner
         groupusers.updateScoreForSUOrATSSelections(suwinner, game.getGameid(), "SU");
 
-        
         //ATS winner selection gets point iff outcome = spread + score
         //again three options
         String atswinner = "NOONE";

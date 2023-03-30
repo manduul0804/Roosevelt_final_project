@@ -1,0 +1,16 @@
+Buffallo Bills, BUF, Houston Texans, HOU, 5-7, 4-8, 2022-09-25 12:00:00
+Denver Broncos, DEN, Atlanta Falcons, ATL, 3-1, 1-5, 2022-09-25 12:00:00
+New Orleans Saints, NO, Seattle Seahawks, SEA, 8-8, 9-3, 2022-09-25 12:00:00
+Tampa Bay Buccaneers, TB, Los Angeles Rams, LA, 2-7, 2-5, 2022-09-25 12:00:00
+Cleveland Browns, CLE, Los Angelos Chargers, LAC, 4-2, 4-6, 2022-09-25 12:00:00
+Green Bay Packers, GB, Chicago Bears, CHI, 4-2, 6-2, 2022-09-25 12:00:00 
+San Francisco 49ers, SF, Minnesota Vikings, MIN, 6-7, 4-7, 2022-09-25 12:00:00
+Las Vegas Raiders, LV, Carolina Panthers, CAR, 3-3, 4-4, 2022-09-25 12:00:00
+Pittsburg Steelers, PIT, Tennessee Titans, TEN, 5-9, 4-8, 2022-09-25 12:00:00 
+Kansas City Chiefs, KC, Detroit Lions, DET, 6-8, 3-3, 2022-09-25 12:00:00
+Philadephia Eagles, PHI, Arizona Cardinals, ARI, 7-5, 5-3, 2022-09-25 12:00:00
+New York Giants, NYG, Cincinatti Bengals, CIN, 5-3, 4-7, 2022-09-25 12:00:00
+Indianapolis Colts, IND, New York Jets, NYJ, 5-8, 2-6, 2022-09-25 12:00:00
+Jacksonville Jaguars, JAX, Miami Dolphins, MIA, 1-1, 0-2, 2022-09-25 12:00:00
+New England Patriots, NE, Washington Commanders, WAS, 7-4, 3-5, 2022-09-25 12:00:00 
+Baltimore Ravens, BAL, Dallas Cowboys, DAL, 5-3, 5-1, 2022-09-25 12:00:00

@@ -22,7 +22,7 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
     PickemGroupUser findByUsernameAndGrpname(String user, String group);
 
     List<PickemGroupUser> findByGrpname(String group);
-    
+
     void deleteByGrpname(String groupname);
 
     List<PickemGroupUser> findByUsername(String username);
@@ -63,12 +63,6 @@ public interface PickemGroupUserRepository extends CrudRepository<PickemGroupUse
             nativeQuery = true)
     void updateScoreForSURVSelectionsLoss(String sel, int gameid);
 
-    
-    
     List<PickemGroupUser> findByStatusOrderByGrpnameAscScoreDesc(String status);
-    
-    
-    
-    
 
 }
