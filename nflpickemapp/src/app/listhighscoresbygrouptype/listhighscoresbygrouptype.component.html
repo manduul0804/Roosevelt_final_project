@@ -1,1 +1,26 @@
-<p>listhighscoresbygrouptype works!</p>
+<h2>High Scores by Group Type</h2>
+<h3 *ngIf="unauth">You are not authorized to see this bub!</h3>
+
+
+<ol *ngIf="!unauth">
+    <li *ngFor="let highScore of highScores">{{highScore}}</li>
+</ol>
+
+<p></p>
+
+<table> 
+    <thead>
+        <tr>
+            <th>Group Type</th>
+            <th>User</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let highScore of highScores">
+            <td>{{highScore.type}}</td>
+            <td>{{highScore.username}}</td>
+            <td>{{highScore.score}}</td>
+        </tr>
+    </tbody>
+</table>
