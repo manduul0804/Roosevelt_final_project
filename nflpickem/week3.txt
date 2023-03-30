@@ -14,6 +14,3 @@ Indianapolis Colts, IND, New York Jets, NYJ, 5-8, 2-6, 2022-09-25 12:00:00
 Jacksonville Jaguars, JAX, Miami Dolphins, MIA, 1-1, 0-2, 2022-09-25 12:00:00
 New England Patriots, NE, Washington Commanders, WAS, 7-4, 3-5, 2022-09-25 12:00:00 
 Baltimore Ravens, BAL, Dallas Cowboys, DAL, 5-3, 5-1, 2022-09-25 12:00:00
-
-
-

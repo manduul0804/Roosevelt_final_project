@@ -14,4 +14,3 @@ Las Vegas Raiders, LV, Minnesota Vikings, MIN, 5-7, 6-6, 2022-09-18 12:00:00
 Green Bay Packers, GB, Los Angelos Chargers, LAC, 2-2, 4-4, 2022-09-18 12:00:00
 Tampa Bay Buccaneers, TB, Seattle Seahawks, SEA, 7-8, 9-1, 2022-09-18 12:00:00
 Denver Broncos, DEN, Dallas Cowboys, DAL, 2-10, 5-10, 2022-09-18 12:00:00
- 
