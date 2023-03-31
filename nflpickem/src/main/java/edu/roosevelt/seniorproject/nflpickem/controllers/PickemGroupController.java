@@ -347,6 +347,28 @@ public class PickemGroupController {
 
             if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
 
+                List<PickemGroupUser> standings = groupusers.findByGrpnameAndStatus(group,"OK");
+
+                return new ResponseEntity(standings, HttpStatus.OK);
+
+            }
+
+        }
+
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+    }
+    
+    //get the leaderboard for a given group (must be admin or in the group)
+    @GetMapping("/nflpickem/groups/allusers/{group}")
+    public ResponseEntity<List<PickemGroupUser>> getAllUsers(@PathVariable("group") String group, HttpSession session) {
+
+        if (isLoggedIn(session)) {
+
+            String username = (String) session.getAttribute("user");
+
+            if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
+
                 List<PickemGroupUser> standings = groupusers.findByGrpname(group);
 
                 return new ResponseEntity(standings, HttpStatus.OK);
@@ -358,6 +380,32 @@ public class PickemGroupController {
         return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
 
     }
+    
+    
+    
+    
+    //get the leaderboard for a given group (must be admin or in the group)
+    @GetMapping("/nflpickem/groups/invited/{group}")
+    public ResponseEntity<List<PickemGroupUser>> getInvitedGroup(@PathVariable("group") String group, HttpSession session) {
+
+        if (isLoggedIn(session)) {
+
+            String username = (String) session.getAttribute("user");
+
+            if (isAdmin(session) || (groupusers.existsByUsernameAndGrpname(username, group))) {
+
+                List<PickemGroupUser> standings = groupusers.findByGrpnameAndStatus(group, "invited");
+
+                return new ResponseEntity(standings, HttpStatus.OK);
+
+            }
+
+        }
+
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+
+    }
+    
 
     // edit/update a group
     @PutMapping(value = "/nflpickem/groups/editgroup", consumes = MediaType.APPLICATION_JSON_VALUE)
