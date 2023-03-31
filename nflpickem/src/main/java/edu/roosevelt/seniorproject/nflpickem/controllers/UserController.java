@@ -4,7 +4,6 @@
  */
 package edu.roosevelt.seniorproject.nflpickem.controllers;
 
-import edu.roosevelt.seniorproject.nflpickem.games.Game;
 import edu.roosevelt.seniorproject.nflpickem.games.GameRepository;
 import edu.roosevelt.seniorproject.nflpickem.user.User;
 import edu.roosevelt.seniorproject.nflpickem.user.UserRepository;
