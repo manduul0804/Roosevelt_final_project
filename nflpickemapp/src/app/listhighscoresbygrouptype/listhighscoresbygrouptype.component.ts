@@ -21,7 +21,7 @@ constructor( private router: Router, private admin: AdminService, private title:
 ngOnInit(): void {
 this.title.setTitle("High Scores By Group Type")
 
-  this.admin.getHighScoresByGroupType().subscribe(data =>{
+  this.admin.getHighScores().subscribe(data =>{
     this.highScores = data;
   }, error =>{
     console.log(error.status);
