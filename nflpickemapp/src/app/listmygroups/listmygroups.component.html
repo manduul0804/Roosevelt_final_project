@@ -1,1 +1,16 @@
-<p>listmygroups works!</p>
+<h1>My Groups</h1>
+
+<h3 *ngIf="unauth">Unauthorized, go back now.</h3>
+
+
+<table cellpadding="5" cellspacing="0" border="1" *ngIf="!unauth">
+    <tr> 
+        <td><b>Username</b></td>
+        <td><b>Groupname</b></td>        
+    </tr>
+
+    <tr *ngFor="let user of groupusers">
+        <td><b>{{user.username}}</b></td>
+      <td><b>{{user.grpname}}</b></td>
+    </tr>
+</table>

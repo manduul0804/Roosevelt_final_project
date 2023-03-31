@@ -1,1 +1,21 @@
-<p>listgamesbyweek works!</p>
+<h1>Games for week 1!</h1>
+
+<h3 *ngIf="unauth">You are not authorized to see this bub!</h3>
+
+<table cellpadding="5" cellspacing="0" border="0" *ngIf="!unauth">
+   
+    <tr>
+        <td><b>Team 1</b></td>
+        <td><b>Is Playing</b></td>
+        <td><b>Team 2</b></td>
+        <td><b>TimeStamp</b></td>       
+    </tr>
+    
+    <tr *ngFor="let game of games">
+        <td><b>{{game.team1}}  ({{game.team1sn}})</b></td>
+        <td><b>Vs.</b></td>
+        <td><b>{{game.team2}}  ({{game.team2sn}})</b></td>
+        <td><b>{{game.kickoff}}</b></td>
+    </tr>
+
+</table>
