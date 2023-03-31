@@ -4,18 +4,32 @@
  */
 package edu.roosevelt.seniorproject.nflpickem.pickemgroupuser;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author mruth
  */
+
 @Entity
-public class PickemGroupUser {
+@Table(name = "PICKEMGROUPUSER")
+public class PickemGroupUser implements java.io.Serializable{
 
     @Id
     int guid;
+
+    public int getGuid() {
+        return guid;
+    }
+
+    public void setGuid(int guid) {
+        this.guid = guid;
+    }
+
+    
     String username;
     String grpname;
     String status;
@@ -33,13 +47,7 @@ public class PickemGroupUser {
             //necessary for survivor league!
             sql = sql + " DONE BOOLEAN,";
      */
-    public int getGuid() {
-        return guid;
-    }
-
-    public void setGuid(int guid) {
-        this.guid = guid;
-    }
+   
 
     public String getUsername() {
         return username;
@@ -81,18 +89,5 @@ public class PickemGroupUser {
         this.done = done;
     }
 
-    public boolean getIsAdmin() {
-        return false;
-    }
-
-    public boolean getIsLeader() {
-        return false;
-    }
-
-    public boolean getIsMember() {
-        return false;
-    }
-
-    public void setIsMember(boolean b) {
-    }
+    
 }

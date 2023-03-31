@@ -8,6 +8,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
@@ -20,18 +21,18 @@ public class InitUsers {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         // TODO code application logic here
         try {
 
             Connection conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/nflpickem",
                     "user", "user");
-/* **********************Manduul Code********************************
+            /* **********************Manduul Code********************************
  **************************START***********************************
                 Task: Add more users (approximately 16 or so)
                 It takes users from users.txt file
-*/
+             */
             Scanner scanner = new Scanner(new File("users.txt"));
             System.out.println("Create USER/GAME (bases)");
             while (scanner.hasNextLine()) {
@@ -64,13 +65,14 @@ public class InitUsers {
 // **************************END*********************************** 
                     System.out.println(sql);
 
-                try {
-                    conn.createStatement().execute(sql);
+                    try {
+                        conn.createStatement().execute(sql);
 
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+
                 }
-
             }
 
             System.out.println("Table USER created!");

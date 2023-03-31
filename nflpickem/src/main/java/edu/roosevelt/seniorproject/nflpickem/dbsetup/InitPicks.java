@@ -37,7 +37,7 @@ public class InitPicks {
 //            sql = sql + " GAMEID INTEGER,";
 //            sql = sql + " SELECTION VARCHAR(30),";
 
-//            int gameID = 10000;
+            int gameID = 10000;
             int pid = 10000;
             
             String sql1 = "SELECT username FROM USER";
@@ -57,33 +57,32 @@ public class InitPicks {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
-//            for (int i = 0; i < users.length; i++) {
-//                for (int y = 0; y < 3; y++) {
-//                    String sql = "INSERT INTO PICKS VALUES (";
-//                    sql = sql + ++pid + ",";
-//                    sql = sql + "'" + users[i] + "',";
-//                    sql = sql + "'" + grps[i] + "',";
-//                    sql = sql + "" + ++gameID + ",";
-//                    sql = sql + "" + 1 + ",";
-//                    if (y == 0) {
-//                        sql = sql + "'NO')";
-//                    } else {
-//                        sql = sql + "'ATL')";
-//                    }
+            for (int i = 0; i < users.length; i++) {
+                for (int y = 0; y < 3; y++) {
+                    String sql = "INSERT INTO PICKS VALUES (";
+                    sql = sql + ++pid + ",";
+                    sql = sql + "'" + users[i] + "',";
+                    sql = sql + "'" + grps[i] + "',";
+                    sql = sql + "" + ++gameID + ",";
+                    sql = sql + "" + 1 + ",";
+                    if (y == 0) {
+                        sql = sql + "'NO')";
+                    } else {
+                        sql = sql + "'ATL')";
+                    }
 //
-//                    System.out.println(sql);
+                    System.out.println(sql);
 //
-//                    try {
-//                        conn.createStatement().execute(sql);
+                    try {
+                        conn.createStatement().execute(sql);
 //
-//                    } catch (Exception e) {
-//                        System.out.println(e.getMessage());
-//                    }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
 //
-//                }
+                }
 //
-//            }
+            }
 
             System.out.println("Table USER created!");
         } catch (Exception e) {

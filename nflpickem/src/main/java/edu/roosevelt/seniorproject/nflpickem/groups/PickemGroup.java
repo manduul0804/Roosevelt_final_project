@@ -14,7 +14,7 @@ import java.util.Objects;
  * @author mruth
  */
 @Entity
-@Table(name = "PICKEMGROUP ")
+@Table(name = "PICKEMGROUP")
 public class PickemGroup {
 
     @Id
