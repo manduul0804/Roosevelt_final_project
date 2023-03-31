@@ -3,7 +3,7 @@ import { UserService } from '../user.service';
 import { PickemgroupService } from '../pickemgroup.service';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Groupuser } from '../group';
+
 
 @Component({
   selector: 'app-listmygroupleaders',
