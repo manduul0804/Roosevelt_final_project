@@ -144,7 +144,7 @@ public class GameController {
         logger.info("Time: " + now);
         Game g = games.findFirstByKickoffAfterOrderByKickoffDesc(now);
         
-        return new ResponseEntity(g.getKickoff(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(g.getKickoff(), HttpStatus.OK);
 
     }
 

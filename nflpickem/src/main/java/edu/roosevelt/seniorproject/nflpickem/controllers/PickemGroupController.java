@@ -307,6 +307,35 @@ public class PickemGroupController {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    
+    // view all groups as an admin
+    @GetMapping("/nflpickem/groups/{group}")
+    public ResponseEntity<PickemGroup> getGroup(@PathVariable("group") String group, HttpSession session) {
+        
+        
+        if (this.isLoggedIn(session)) {
+            //get username
+            String username = this.getUserName(session);
+
+            if (groups.existsByName(group)) {
+                //get the group
+                PickemGroup pg = groups.findByName(group);
+                if (pg.getAdmin().equals(username) || this.isAdmin(session)) {
+                    return new ResponseEntity(pg, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+                }
+
+            } else {
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            }
+
+        }
+       
+        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
+       
+    }
 
     //get the leaderboard for a given group (must be admin or in the group)
     @GetMapping("/nflpickem/groups/leaderboard/{group}")

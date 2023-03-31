@@ -83,7 +83,7 @@ public class AdminController {
     public ResponseEntity<Long> getTotalNumberOfUsers(HttpSession session) {
         if (this.isAdmin(session)) {
 
-            return new ResponseEntity(users.count(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(users.count(), HttpStatus.OK);
 
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
@@ -94,7 +94,7 @@ public class AdminController {
     public ResponseEntity<Long> getTotalNumberOfPicks(HttpSession session) {
         if (this.isAdmin(session)) {
 
-            return new ResponseEntity(picks.count(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(picks.count(), HttpStatus.OK);
 
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
@@ -105,7 +105,7 @@ public class AdminController {
     public ResponseEntity<Long> getTotalNumberOfGroups(HttpSession session) {
         if (this.isAdmin(session)) {
 
-            return new ResponseEntity(groups.count(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(groups.count(), HttpStatus.OK);
 
         } else {
             return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
